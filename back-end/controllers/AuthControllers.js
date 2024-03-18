@@ -29,8 +29,6 @@ class AuthController {
     const userId = await UserControllers.insertUser(email, hashedPassword);
     req.session.authenticated = true;
     req.session.userId = userId;
-    //const sessionId = await redisInstance.startSession(id);
-    //return res.status(201).json({ message: 'user got registered', sessionId });
     return res.status(201).json({ message: 'user got registered' });
   }
 
@@ -52,9 +50,12 @@ class AuthController {
     if (!user) {
       return res.status(404).json({ error: 'user is either not registered or incorrect password' });
     }
+    if (req.session.authenticated === true) {
+      return res.status(400).json({ message: 'user is already logged in', sessionId: req.sessionID });
+    }
     req.session.authenticated = true;
     req.session.userId = user._id.toString();
-    return res.status(200).json({ message: 'user got logged in' });
+    return res.status(200).json({ message: 'user got logged in', sessionId: req.sessionID });
   }
 
   /*
@@ -63,13 +64,13 @@ class AuthController {
    *
    */
   static async logout(req, res) {
-    //const { sessionId } = req.body;
-    //const id = redisInstance.getSession(sessionId);
-    //if (id) {
-    //  await redisInstance.destroySession(sessionId);
-    //  return res.status(200).json({ message: 'user got logged out' });
-    //}
-    return res.static(400).json({ error: 'invalid session id' });
+    req.session.destroy((err) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ error: err });
+      }
+      return res.status(200).json({ success: 'logged out successfully' });
+    });
   }
 }
 module.exports = AuthController;
