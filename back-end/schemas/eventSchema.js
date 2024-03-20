@@ -29,16 +29,17 @@ const createIndex = async (db) => {
   }
 };
 
-const createCollection = async (db) => {
-  createIndex(db);
-  if (checkExists(db)) {
+const createEventCollection = async (db) => {
+  const exists = await checkExists(db);
+  if (exists) {
+    createIndex(db);
     return;
   }
   await db.createCollection('events', {
     validator: {
       $jsonSchema: {
         bsonType: 'object',
-        required: ['name', 'description', 'createrId', 'date', 'location', 'organizer'],
+        required: ['name', 'description', 'createrId', 'date', 'location', 'organizer', 'category'],
         properties: {
           name: {
             bsonType: 'string',
@@ -64,6 +65,10 @@ const createCollection = async (db) => {
             bsonType: 'string',
             description: 'Organizer is a required field',
           },
+          category: {
+            bsonType: ObjectId,
+            description: 'categoryId is a required field',
+          },
           attendees: {
             bsonType: 'array',
             items: {
@@ -75,4 +80,4 @@ const createCollection = async (db) => {
     },
   });
 };
-module.exports = createCollection;
+module.exports = createEventCollection;

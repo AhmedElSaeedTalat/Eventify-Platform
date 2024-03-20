@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb';
+import CategoryControllers from './CategoryControllers';
 import dbInstance from '../utils/db';
 /* events controllers module */
 class EventControllers {
@@ -14,9 +15,16 @@ class EventControllers {
       return res.status(401).json({ error: 'you must be authenticated to create event' });
     }
     const { name, description } = req.body;
-    const { location, organizer } = req.body;
+    const { location, organizer, category } = req.body;
     const createrId = req.session.userId;
     const date = new Date();
+    let categoryId;
+    const categoryDocument = await CategoryControllers.findCategory({ name: category });
+    if (categoryDocument) {
+      categoryId = categoryDocument._id;
+    } else {
+      return res.status(404).json({ error: 'please send a valid category name' });
+    }
     const data = {
       name,
       description,
@@ -24,6 +32,7 @@ class EventControllers {
       date,
       location,
       organizer,
+      category: categoryId,
     };
     const eventId = await EventControllers.insertEvent(data);
     if (eventId === -1) {
