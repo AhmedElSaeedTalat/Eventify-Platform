@@ -14,10 +14,10 @@ class EventControllers {
     if (!req.session.authenticated) {
       return res.status(401).json({ error: 'you must be authenticated to create event' });
     }
-    const { name, description } = req.body;
+    const { name, description, date } = req.body;
     const { location, organizer, category } = req.body;
     const createrId = req.session.userId;
-    const date = new Date();
+	const dateObj = new Date(date);
     let categoryId;
     const categoryDocument = await CategoryControllers.findCategory({ name: category });
     if (categoryDocument) {
@@ -29,7 +29,7 @@ class EventControllers {
       name,
       description,
       createrId,
-      date,
+      date: dateObj,
       location,
       organizer,
       category: categoryId,

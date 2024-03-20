@@ -1,5 +1,6 @@
 import { MongoClient } from 'mongodb';
-import createCollection from '../schemas/eventSchema';
+import createEventCollection from '../schemas/eventSchema';
+import createCategoryCollection from '../schemas/categorySchema';
 /* module to set up db */
 
 class DbClient {
@@ -19,7 +20,8 @@ class DbClient {
       console.log('database connected successfully');
       this.db = this.client.db('events');
       try {
-        createCollection(this.db);
+        createEventCollection(this.db);
+        createCategoryCollection(this.db);
       } catch (err) {
         console.log(err);
       }
