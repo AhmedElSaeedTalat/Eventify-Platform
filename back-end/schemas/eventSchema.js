@@ -17,7 +17,20 @@ const checkExists = async (db) => {
   return false;
 };
 
+/*
+ * @createIndex: function to create index and
+ * add the unique attribute on name
+ *
+ */
+const createIndex = async (db) => {
+  const exists = await db.collection('events').indexExists('name_1');
+  if (!exists) {
+    await db.collection('events').createIndex({ name: 1 }, { unique: true });
+  }
+};
+
 const createCollection = async (db) => {
+  createIndex(db);
   if (checkExists(db)) {
     return;
   }

@@ -12,14 +12,18 @@ class DbClient {
     const port = process.env.PORT || 27017;
     const url = `mongodb://${host}:${port}`;
     this.client = new MongoClient(url);
-    await this.client.connect();
-    console.log('database connected successfully');
-    this.db = this.client.db('events');
-    try {
-      createCollection(this.db);
-    } catch (err) {
-      console.log(err);
-    }
+    this.client.connect((err) => {
+      if (err) {
+        console.log(err);
+      }
+      console.log('database connected successfully');
+      this.db = this.client.db('events');
+      try {
+        createCollection(this.db);
+      } catch (err) {
+        console.log(err);
+      }
+    });
   }
 }
 const dbInstance = new DbClient();

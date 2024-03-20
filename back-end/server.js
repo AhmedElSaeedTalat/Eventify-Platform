@@ -3,6 +3,7 @@ import session from 'express-session';
 import { v4 } from 'uuid';
 import RedisStore from 'connect-redis';
 import { createClient } from 'redis';
+import cors from 'cors';
 import dbInstance from './utils/db';
 import routes from './routes/index';
 /* module to start the server */
@@ -27,6 +28,9 @@ const printMethod = (req, res, next) => {
 app.use(printMethod);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors({
+  origin: ['http://localhost:3001'],
+}));
 app.use(session({
   store,
   secret: v4(),
@@ -43,9 +47,9 @@ app.use(session({
 routes(app);
 
 /* listen to server */
-app.listen(3000, (err) => {
+app.listen(5001, (err) => {
   if (!err) {
-    console.log('started server at port 3000');
+    console.log('started server at port 5001');
   }
 });
 module.exports = app;
