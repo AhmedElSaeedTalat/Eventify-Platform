@@ -10,7 +10,7 @@ import { ObjectId } from 'mongodb';
  *
  */
 const checkExists = async (db) => {
-  const collections = await db.listCollections({ name: 'category' }).toArray();
+  const collections = await db.listCollections({ name: 'users' }).toArray();
   if (collections.length > 0) {
     return true;
   }
@@ -23,35 +23,41 @@ const checkExists = async (db) => {
  *
  */
 const createIndex = async (db) => {
-  const exists = await db.collection('category').indexExists('name_1');
+  const exists = await db.collection('users').indexExists('email_1');
   if (!exists) {
-    await db.collection('category').createIndex({ name: 1 }, { unique: true });
+    await db.collection('users').createIndex({ email: 1 }, { unique: true });
   }
 };
 
-const createCategoryCollection = async (db) => {
+const createUsersCollection = async (db) => {
   const exists = await checkExists(db);
   if (exists) {
     createIndex(db);
     return;
   }
-  await db.createCollection('category', {
+  await db.createCollection('users', {
     validator: {
       $jsonSchema: {
         bsonType: 'object',
-        required: ['name', 'description'],
+        required: ['email', 'password'],
         properties: {
-          name: {
+          email: {
             bsonType: 'string',
-            description: 'Name is a required field',
+            description: 'Email is a required field',
           },
-          description: {
+          password: {
             bsonType: 'string',
-            description: 'Description is a required field',
+            description: 'Password is a required field',
+          },
+          eventIds: {
+            bsonType: 'array',
+            items: {
+              type: ObjectId,
+            },
           },
         },
       },
     },
   });
 };
-module.exports = createCategoryCollection;
+module.exports = createUsersCollection;
