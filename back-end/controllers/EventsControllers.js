@@ -53,6 +53,35 @@ class EventControllers {
   }
 
   /*
+   * @updateEvent: update events
+   *
+   * @req: request object
+   * @res: response object
+   *
+   */
+  static async updateEvent(req, res) {
+    if (!req.session.authenticated) {
+      return res.status(401).json({ error: 'you must be authenticated to update the event' });
+    }
+    const acceptedFields = ['name', 'description', 'date', 'location', 'organizer'];
+    const id = req.params;
+    const passedData = req.body;
+    for (const [key, value] of Object.entries(passedData)) {
+      if (!acceptedFields.includes(key)) {
+        return res.status(500).json({ error: 'field can\'t be updated' });
+      }
+      if (key === 'date') {
+        passedData[key] = new Date(passedData[key]);
+      }
+    }
+    const response = await dbInstance.db.collection('events').updateOne({ _id: ObjectId(id) }, { $set: passedData });
+    if (response.modifiedCount === 1) {
+      return res.status(200).json({ msg: 'document succesfully was updated' });
+    }
+    return res.status(500).json({ error: 'there was an error updating the document' });
+  }
+
+  /*
    * @displayEvent: display and event function
    *
    * @req: request object
