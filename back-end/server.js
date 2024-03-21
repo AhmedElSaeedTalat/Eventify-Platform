@@ -11,12 +11,12 @@ import routes from './routes/index';
 let store;
 const app = express();
 const client = createClient({
-  host: 'localhost', // Change this to your Redis server host
+  host: 'localhost',
   port: 6379,
 });
 
 client.on('connect', () => {
-  console.log('connected');
+  console.log('connected to redis');
   store = new RedisStore({ client });
 });
 const printMethod = (req, res, next) => {
