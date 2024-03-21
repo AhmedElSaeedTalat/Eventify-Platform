@@ -9,5 +9,6 @@ const routes = (app) => {
   app.get('/logout', AuthControllers.logout);
   app.post('/event', EventsControllers.createEvent);
   app.get('/event/:id', EventsControllers.displayEvent);
+  app.get('/events', EventsControllers.displayEvents);
 };
 module.exports = routes;
