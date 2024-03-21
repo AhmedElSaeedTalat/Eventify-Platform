@@ -17,14 +17,25 @@ class EventControllers {
     const { name, description, date } = req.body;
     const { location, organizer, category } = req.body;
     const createrId = req.session.userId;
-	const dateObj = new Date(date);
+    // check if date of event passed and is valid
+    if (!date) {
+      return res.status(404).json({ error: 'date of event wasnt passed' });
+    }
+    const dateObj = new Date(date);
+    const currentDate = new Date();
+    if (currentDate > dateObj) {
+      return res.status(500).json({ error: 'please provide a valid date' });
+    }
     let categoryId;
+    // check if category passed is valid, by finding it
+    // passing its id to db
     const categoryDocument = await CategoryControllers.findCategory({ name: category });
     if (categoryDocument) {
       categoryId = categoryDocument._id;
     } else {
       return res.status(404).json({ error: 'please send a valid category name' });
     }
+    // send data to db
     const data = {
       name,
       description,
@@ -42,7 +53,7 @@ class EventControllers {
   }
 
   /*
-   * @displayEvent: display event function
+   * @displayEvent: display and event function
    *
    * @req: request object
    * @res: response object
@@ -56,6 +67,104 @@ class EventControllers {
       return res.status(404).josn({ error: 'no event was found' });
     }
     return res.status(200).json(evnt);
+  }
+
+  /*
+   * @displayEvents: display all events
+   *
+   * @req: request object
+   * @res: response object
+   *
+   *
+   */
+  static async displayEvents(req, res) {
+    const pageSize = 3;
+    const { category, sortField } = req.query;
+    let { page } = req.query;
+    if (!page) page = 1;
+    // query in case displaying all events
+    const pipeStandard = [
+      {
+        $lookup: {
+          from: 'category',
+          localField: 'category',
+          foreignField: '_id',
+          as: 'category',
+        },
+      },
+      { $match: { date: { $gte: new Date() } } },
+      { $skip: (page - 1) * pageSize },
+      { $limit: pageSize },
+    ];
+
+    // query in case displaying events based on category
+    const pipeCategory = [
+      {
+        $lookup: {
+          from: 'category',
+          localField: 'category',
+          foreignField: '_id',
+          as: 'category',
+        },
+      },
+      { $match: { date: { $gte: new Date() }, 'category.name': category } },
+      { $skip: (page - 1) * pageSize },
+      { $limit: pageSize },
+    ];
+
+    // query in case displaying all events sorted by date
+    const pipeStandardDate = [
+      {
+        $lookup: {
+          from: 'category',
+          localField: 'category',
+          foreignField: '_id',
+          as: 'category',
+        },
+      },
+      { $match: { date: { $gte: new Date() } } },
+      { $sort: { date: 1 } },
+      { $skip: (page - 1) * pageSize },
+      { $limit: pageSize },
+    ];
+
+    // query in case displaying events based on category and sorted by date
+    const pipeCategoryDate = [
+      {
+        $lookup: {
+          from: 'category',
+          localField: 'category',
+          foreignField: '_id',
+          as: 'category',
+        },
+      },
+      { $match: { date: { $gte: new Date() }, 'category.name': category } },
+      { $sort: { date: 1 } },
+      { $skip: (page - 1) * pageSize },
+      { $limit: pageSize },
+    ];
+
+    if (category) {
+      if (sortField) {
+        dbInstance.db.collection('events').aggregate(pipeCategoryDate).toArray().then((result) => {
+          res.status(200).json({ result });
+        });
+      } else {
+        dbInstance.db.collection('events').aggregate(pipeCategory).toArray().then((result) => {
+          res.status(200).json({ result });
+        });
+      }
+    } else {
+      if (sortField) {
+        dbInstance.db.collection('events').aggregate(pipeStandardDate).toArray().then((result) => {
+          res.status(200).json({ result });
+        });
+      } else {
+        dbInstance.db.collection('events').aggregate(pipeStandard).toArray().then((result) => {
+          res.status(200).json({ result });
+        });
+      }
+    }
   }
 
   /*
