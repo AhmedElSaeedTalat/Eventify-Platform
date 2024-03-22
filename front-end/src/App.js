@@ -4,8 +4,11 @@ import Signup from "./components/Signup/Signup";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./components/Navbar/Navbar";
 import { Routes, Route } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function App() {
+  const userAuth = useSelector((state) => state.auth.isLoggedIn);
+  console.log(userAuth);
   return (
     <div className="App">
       <Navbar />
