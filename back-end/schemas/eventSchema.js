@@ -39,7 +39,7 @@ const createEventCollection = async (db) => {
     validator: {
       $jsonSchema: {
         bsonType: 'object',
-        required: ['name', 'description', 'createrId', 'date', 'location', 'organizer', 'category'],
+        required: ['name', 'description', 'createrId', 'date', 'location', 'organizer', 'category', 'state'],
         properties: {
           name: {
             bsonType: 'string',
@@ -68,6 +68,10 @@ const createEventCollection = async (db) => {
           category: {
             bsonType: ObjectId,
             description: 'categoryId is a required field',
+          },
+          state: {
+            bsonType: 'string',
+            description: 'state is a required field, show the state of event active or cancelled',
           },
           attendees: {
             bsonType: 'array',
