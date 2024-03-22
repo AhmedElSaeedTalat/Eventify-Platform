@@ -1,5 +1,6 @@
 import { ObjectId } from 'mongodb';
 import CategoryControllers from './CategoryControllers';
+import UserControllers from './UserControllers';
 import dbInstance from '../utils/db';
 /* events controllers module */
 class EventControllers {
@@ -194,6 +195,42 @@ class EventControllers {
         });
       }
     }
+  }
+
+  /*
+   * @attendEvent: function so user Attend Event
+   *
+   *
+   * @req: request object
+   * @res: response object
+   *
+   */
+  static async attendEvent(req, res) {
+    if (!req.session.authenticated) {
+      return res.status(401).json({ error: 'you must be authenticated to attend the event' });
+    }
+    const { userId } = req.session;
+    const { eventId } = req.body;
+    // add event reference to user after checking if id
+    // is not there
+    const user = await UserControllers.findUser({ _id: ObjectId(userId) });
+    if (user.hasOwnProperty('eventIds')) {
+      for (const item of user.eventIds) {
+        if (item.equals(ObjectId(eventId))) {
+          return res.status(500).json({ error: 'user has already registered for this event' });
+        }
+      }
+    }
+    const updatedUser = await dbInstance.db.collection('users').updateOne({ _id: ObjectId(userId) }, { $push: { eventIds: ObjectId(eventId) } });
+    if (updatedUser.modifiedCount !== 1) {
+      return res.status(500).json({ error: 'coudn\'t be modifed' });
+    }
+    // add reference to user reference to event
+    const updatedEvent = await dbInstance.db.collection('events').updateOne({ _id: ObjectId(eventId) }, { $push: { attendees: ObjectId(userId) } });
+    if (updatedEvent.modifiedCount !== 1) {
+      return res.status(500).json({ error: 'coudn\'t be modifed' });
+    }
+    return res.status(200).json({ msg: 'sucessfully attending event' });
   }
 
   /*
