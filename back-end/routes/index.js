@@ -14,5 +14,6 @@ const routes = (app) => {
   app.put('/event-update/:id', EventsControllers.updateEvent);
   app.post('/attend-event', EventsControllers.attendEvent);
   app.get('/user-events', UserControllers.showEvent);
+  app.get('/unattend-event/:eventId', UserControllers.unattendEvent);
 };
 module.exports = routes;
