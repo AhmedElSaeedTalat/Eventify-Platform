@@ -15,8 +15,15 @@ class EventControllers {
     if (!req.session.authenticated) {
       return res.status(401).json({ error: 'you must be authenticated to create event' });
     }
-    const { name, description, date } = req.body;
-    const { location, organizer, category } = req.body;
+    const {
+      name,
+      description,
+      date,
+      state,
+      location,
+      organizer,
+      category,
+    } = req.body;
     const createrId = req.session.userId;
     // check if date of event passed and is valid
     if (!date) {
@@ -44,11 +51,12 @@ class EventControllers {
       date: dateObj,
       location,
       organizer,
+      state,
       category: categoryId,
     };
     const eventId = await EventControllers.insertEvent(data);
     if (eventId === -1) {
-      return res.status(500).json({ error: 'couldn\'t insert event' });
+      return res.status(500).json({ error: 'couldn\'t insert event check missing fields' });
     }
     return res.status(201).json({ messege: 'successfully added event', eventID: eventId });
   }
@@ -64,7 +72,7 @@ class EventControllers {
     if (!req.session.authenticated) {
       return res.status(401).json({ error: 'you must be authenticated to update the event' });
     }
-    const acceptedFields = ['name', 'description', 'date', 'location', 'organizer'];
+    const acceptedFields = ['name', 'description', 'date', 'location', 'organizer', 'state'];
     const id = req.params;
     const passedData = req.body;
     for (const [key, value] of Object.entries(passedData)) {
