@@ -58,5 +58,29 @@ class UserControllers {
       return res.status(404).json({ error: 'no events found' });
     });
   }
+
+  /*
+   * @unattendEvent: remove event's reference from user
+   *
+   * @req: request object
+   * @res: response object
+   *
+   */
+  static async unattendEvent(req, res) {
+    if (!req.session.authenticated) {
+      return res.status(401).json({ error: 'you must be authenticated to remove event' });
+    }
+    const { userId } = req.session;
+    const { eventId } = req.params;
+    const user = await dbInstance.db.collection('users').updateOne({ _id: ObjectId(userId) }, { $pull: { eventIds: ObjectId(eventId) } });
+    if (user.modifiedCount !== 1) {
+      return res.status(500).json({ error: 'error occureed removing event' });
+    }
+    const evnt = await dbInstance.db.collection('events').updateOne({ _id: ObjectId(eventId) }, { $pull: { attendees: ObjectId(userId) } });
+    if (evnt.modifiedCount !== 1) {
+      return res.status(500).json({ error: 'error occureed removing event' });
+    }
+    return res.status(200).json({ msg: 'successfully removed event from events user is attending' });
+  }
 }
 module.exports = UserControllers;
