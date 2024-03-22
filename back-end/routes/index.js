@@ -11,5 +11,6 @@ const routes = (app) => {
   app.get('/event/:id', EventsControllers.displayEvent);
   app.get('/events', EventsControllers.displayEvents);
   app.put('/event-update/:id', EventsControllers.updateEvent);
+  app.post('/attend-event', EventsControllers.attendEvent);
 };
 module.exports = routes;
