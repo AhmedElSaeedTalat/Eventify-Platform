@@ -1,6 +1,7 @@
 import MainControllers from '../controllers/MainControllers';
 import AuthControllers from '../controllers/AuthControllers';
 import EventsControllers from '../controllers/EventsControllers';
+import UserControllers from '../controllers/UserControllers';
 /* adding routes */
 const routes = (app) => {
   app.get('/home', MainControllers.home);
@@ -12,5 +13,6 @@ const routes = (app) => {
   app.get('/events', EventsControllers.displayEvents);
   app.put('/event-update/:id', EventsControllers.updateEvent);
   app.post('/attend-event', EventsControllers.attendEvent);
+  app.get('/user-events', UserControllers.showEvent);
 };
 module.exports = routes;
