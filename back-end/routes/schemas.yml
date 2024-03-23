@@ -1,50 +1,52 @@
-Components:
+components:
   schemas:
     # registration schema Request
     registrationRequestBody:
-        type: object
-        properties:
-            email:
-                type: string
-                format: email
-            password:
-                type: string
-                format: password
-        required:
-            - email
-            - password
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+      required:
+        - email
+        - password
 
     # response
     regResponseBody:
-        type: object
-        properties:
-            message:
-                type: string
+      type: object
+      properties:
+        message:
+          type: string
+
+    # response error
     resError:
-        type: object
-        properties:
-            error:
-                type: string
+      type: object
+      properties:
+        error:
+          type: string
 
     # login schema
     loginRequestBody:
-        type: object
-        properties:
-            email:
-                type: string
-                format: email
-            password:
-                type: string
-                format: password
-        required:
-            - email
-            - password
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+      required:
+        - email
+        - password
 
     # login response
     loginResponseBody:
-        type: object
-        properties:
-            message:
-                type: string
-            sessionId:
-                type: string
+      type: object
+      properties:
+        message:
+          type: string
+        sessionId:
+          type: string
