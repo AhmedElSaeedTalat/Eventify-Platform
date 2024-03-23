@@ -27,7 +27,7 @@ const routes = (app) => {
    *       content:
    *         application/json:
    *           schema:
-   *              $ref: '#/components/schemas/registrationRequestBody'
+   *             $ref: '#/components/schemas/registrationRequestBody'
    *     responses:
    *       201:
    *         description: successful registration
@@ -56,7 +56,7 @@ const routes = (app) => {
    *       content:
    *         application/json:
    *           schema:
-   *              $ref: '#/components/schemas/loginRequestBody'
+   *             $ref: '#/components/schemas/loginRequestBody'
    *     responses:
    *       200:
    *         description: successful login
