@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./components/Navbar/Navbar";
 import { Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Home from "./components/Home/Home";
 
 function App() {
   const userAuth = useSelector((state) => state.auth.isLoggedIn);
@@ -12,8 +13,8 @@ function App() {
   return (
     <div className="App">
       <Navbar />
-      <h1>Home Page</h1>
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Signup />} />
       </Routes>

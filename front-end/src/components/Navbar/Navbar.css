@@ -1,3 +1,30 @@
+nav {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+@media (max-width: 992px) {
+  nav {
+    background-color: #eee;
+  }
+  nav .nav-link {
+    color: black !important;
+  }
+}
+
+nav .navbar-brand {
+  color: #ff4c4c;
+  font-size: 25px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+nav .nav-link {
+  color: aliceblue;
+}
+
 nav .auth {
   font-size: 19px;
   font-weight: bold;
