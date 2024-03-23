@@ -1,0 +1,43 @@
+Components:
+  schemas:
+    registrationRequestBody:
+        type: object
+        properties:
+            email:
+                type: string
+                format: email
+            password:
+                type: string
+                format: password
+        required:
+            - email
+            - password
+    regResponseBody:
+        type: object
+        properties:
+            message:
+                type: string
+    resError:
+        type: object
+        properties:
+            error:
+                type: string
+    loginRequestBody:
+        type: object
+        properties:
+            email:
+                type: string
+                format: email
+            password:
+                type: string
+                format: password
+        required:
+            - email
+            - password
+    loginResponseBody:
+        type: object
+        properties:
+            message:
+                type: string
+            sessionId:
+                type: string

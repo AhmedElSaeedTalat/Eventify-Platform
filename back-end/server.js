@@ -1,6 +1,8 @@
 import express from 'express';
 import session from 'express-session';
 import { v4 } from 'uuid';
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
 import RedisStore from 'connect-redis';
 import { createClient } from 'redis';
 import cors from 'cors';
@@ -42,6 +44,26 @@ app.use(session({
     httpOnly: true,
   },
 }));
+
+/* swagger setup */
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Eventify Api',
+      version: '1.0.0',
+      description: 'Eventify platform api',
+    },
+    servers: [
+      {
+        url: 'http://localhost:5001',
+      },
+    ],
+  },
+  apis: ['./routes/*.js', './routes/schemas.yml'],
+};
+const specs = swaggerJsdoc(options);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 /* routes */
 routes(app);
