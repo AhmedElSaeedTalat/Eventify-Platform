@@ -72,7 +72,6 @@ const routes = (app) => {
    *               $ref: '#/components/schemas/resError'
    *
    */
-
   app.post('/login', AuthControllers.login);
   app.get('/logout', AuthControllers.logout);
   app.post('/event', EventsControllers.createEvent);
