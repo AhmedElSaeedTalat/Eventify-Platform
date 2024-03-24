@@ -77,7 +77,7 @@ const routes = (app) => {
   /**
    * @swagger
    * /logout:
-   *   post:
+   *   get:
    *     summary: login user using Email and password
    *     description: post data to login yser
    *     responses:
@@ -99,7 +99,7 @@ const routes = (app) => {
 
   /**
    * @swagger
-   * /event:
+   * /create-event:
    *   post:
    *     summary: create new event
    *     description: post data to login yser
@@ -160,6 +160,41 @@ const routes = (app) => {
    *
    */
   app.get('/event/:id', EventsControllers.displayEvent);
+
+  /**
+   * @swagger
+   * /events:
+   *   get:
+   *     summary: show all events
+   *     description: display all avaliable events
+   *     parameters:
+   *       - in: query
+   *         name: page
+   *         description: page number
+   *         required: false
+   *         schema:
+   *           type: integer
+   *       - in: query
+   *         name: category
+   *         description: category name
+   *         required: false
+   *         schema:
+   *           type: string
+   *       - in: query
+   *         name: sortField
+   *         description: used to sort events by date
+   *         required: false
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: successful retrieval
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/displayEventResponse'
+   *
+   */
   app.get('/events', EventsControllers.displayEvents);
 
   /**
@@ -236,7 +271,7 @@ const routes = (app) => {
    * @swagger
    * /user-events:
    *   get:
-   *     summary: show events that user is attending if exit
+   *     summary: show events that user is attending if exist
    *     description: show events user is attending
    *     responses:
    *       200:
