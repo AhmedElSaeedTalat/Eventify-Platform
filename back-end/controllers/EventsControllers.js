@@ -44,7 +44,12 @@ class EventControllers {
     } else {
       return res.status(404).json({ error: 'please send a valid category name' });
     }
-    const convertPrice = Number(price);
+    let convertPrice;
+    if (!Number.isNaN(price) && Number.isInteger(Number(price))) {
+      convertPrice = Number(price);
+    } else {
+      return res.status(500).json({ error: 'could\'t insert price' });
+    }
     // send data to db
     const data = {
       name,
@@ -96,14 +101,20 @@ class EventControllers {
       if (!acceptedFields.includes(key)) {
         return res.status(500).json({ error: 'field can\'t be updated' });
       }
+      // convert date string to date object and make sure its valid
       if (key === 'date') {
         passedData[key] = new Date(passedData[key]);
         if (currentDate > passedData[key]) {
           return res.status(500).json({ error: 'please provide a valid date' });
         }
       }
+      // convert prince string to integer before its inserted
       if (key === 'price') {
-        passedData[key] = Number(passedData[key]);
+        if (!Number.isNaN(passedData[key]) && Number.isInteger(Number(passedData[key]))) {
+          passedData[key] = Number(passedData[key]);
+        } else {
+          return res.status(500).json({ error: 'could\'t update price' });
+        }
       }
     }
     const response = await dbInstance.db.collection('events').updateOne({ _id: ObjectId(id) }, { $set: passedData });
