@@ -91,12 +91,16 @@ class EventControllers {
       return res.status(401).json({ error: 'you must be the event creater to update the event' });
     }
     const passedData = req.body;
+    const currentDate = new Date();
     for (const [key, value] of Object.entries(passedData)) {
       if (!acceptedFields.includes(key)) {
         return res.status(500).json({ error: 'field can\'t be updated' });
       }
       if (key === 'date') {
         passedData[key] = new Date(passedData[key]);
+        if (currentDate > passedData[key]) {
+          return res.status(500).json({ error: 'please provide a valid date' });
+        }
       }
       if (key === 'price') {
         passedData[key] = Number(passedData[key]);
