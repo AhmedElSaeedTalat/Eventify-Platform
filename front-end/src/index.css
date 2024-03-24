@@ -34,7 +34,8 @@ ul {
   padding: 0;
 }
 /* End Global Rules*/
-
-body {
-  height: 3000px;
+:root {
+  --main-color: #f94c4c;
+  --light-color: #fff;
+  --text-color: #000;
 }
