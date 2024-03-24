@@ -115,7 +115,7 @@ class EventControllers {
     const data = { _id: ObjectId(id) };
     const evnt = await EventControllers.findEvent(data);
     if (!evnt) {
-      return res.status(404).josn({ error: 'no event was found' });
+      return res.status(404).json({ error: 'no event was found' });
     }
     return res.status(200).json(evnt);
   }
@@ -251,7 +251,7 @@ class EventControllers {
     if (updatedEvent.modifiedCount !== 1) {
       return res.status(500).json({ error: 'coudn\'t be modifed' });
     }
-    return res.status(200).json({ msg: 'sucessfully attending event' });
+    return res.status(200).json({ message: 'sucessfully attending event' });
   }
 
   /*

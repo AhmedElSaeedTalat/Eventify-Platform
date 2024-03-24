@@ -60,7 +60,7 @@ const options = {
       },
     ],
   },
-  apis: ['./routes/*.js', './routes/schemas.yml'],
+  apis: ['./routes/*.js', './routes/*.yml'],
 };
 const specs = swaggerJsdoc(options);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));

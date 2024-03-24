@@ -68,7 +68,7 @@ class UserControllers {
    */
   static async unattendEvent(req, res) {
     if (!req.session.authenticated) {
-      return res.status(401).json({ error: 'you must be authenticated to remove event' });
+      return res.status(401).json({ error: 'you must be authenticated to unattend the event' });
     }
     const { userId } = req.session;
     const { eventId } = req.params;
@@ -80,7 +80,7 @@ class UserControllers {
     if (evnt.modifiedCount !== 1) {
       return res.status(500).json({ error: 'error occureed removing event' });
     }
-    return res.status(200).json({ msg: 'successfully removed event from events user is attending' });
+    return res.status(200).json({ message: 'successfully removed event from events user is attending' });
   }
 }
 module.exports = UserControllers;
