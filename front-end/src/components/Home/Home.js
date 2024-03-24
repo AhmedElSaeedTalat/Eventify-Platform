@@ -2,6 +2,8 @@ import React from "react";
 import "./Home.css";
 import About from "../About/About";
 import EventCard from "../EventCard/EventCard";
+import AuthBanner from "../AuthBanner/AuthBanner";
+import Contact from "../Contact/Contact";
 
 const events = [
   {
@@ -88,6 +90,8 @@ function Home() {
           </div>
         </div>
       </div>
+      <AuthBanner />
+      <Contact />
     </>
   );
 }
