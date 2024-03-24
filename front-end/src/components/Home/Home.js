@@ -4,6 +4,7 @@ import About from "../About/About";
 import EventCard from "../EventCard/EventCard";
 import AuthBanner from "../AuthBanner/AuthBanner";
 import Contact from "../Contact/Contact";
+import Footer from "../Footer/Footer";
 
 const events = [
   {
@@ -92,6 +93,7 @@ function Home() {
       </div>
       <AuthBanner />
       <Contact />
+      <Footer />
     </>
   );
 }
