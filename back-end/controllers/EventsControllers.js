@@ -23,6 +23,7 @@ class EventControllers {
       location,
       organizer,
       category,
+      price,
     } = req.body;
     const createrId = req.session.userId;
     // check if date of event passed and is valid
@@ -43,6 +44,7 @@ class EventControllers {
     } else {
       return res.status(404).json({ error: 'please send a valid category name' });
     }
+    const convertPrice = Number(price);
     // send data to db
     const data = {
       name,
@@ -52,6 +54,7 @@ class EventControllers {
       location,
       organizer,
       state,
+      price: convertPrice,
       category: categoryId,
     };
     const eventId = await EventControllers.insertEvent(data);
@@ -73,7 +76,7 @@ class EventControllers {
       return res.status(401).json({ error: 'you must be authenticated to update the event' });
     }
     /* determine accepted fields to be updated */
-    const acceptedFields = ['name', 'description', 'date', 'location', 'organizer', 'state'];
+    const acceptedFields = ['name', 'description', 'date', 'location', 'organizer', 'state', 'price'];
     const id = req.params;
     /* check if event exists */
     const evnt = await EventControllers.findEvent({ _id: ObjectId(id) });
@@ -95,10 +98,13 @@ class EventControllers {
       if (key === 'date') {
         passedData[key] = new Date(passedData[key]);
       }
+      if (key === 'price') {
+        passedData[key] = Number(passedData[key]);
+      }
     }
     const response = await dbInstance.db.collection('events').updateOne({ _id: ObjectId(id) }, { $set: passedData });
     if (response.modifiedCount === 1) {
-      return res.status(200).json({ msg: 'document succesfully was updated' });
+      return res.status(200).json({ message: 'document succesfully was updated' });
     }
     return res.status(500).json({ error: 'there was an error updating the document' });
   }
