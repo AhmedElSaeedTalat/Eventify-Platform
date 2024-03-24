@@ -221,7 +221,7 @@ const routes = (app) => {
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/loginResponseBody'
+   *               $ref: '#/components/schemas/regResponseBody'
    *       404:
    *         description: error cant find event
    *         content:
