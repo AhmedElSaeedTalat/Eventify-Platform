@@ -330,5 +330,34 @@ const routes = (app) => {
    *
    */
   app.get('/unattend-event/:eventId', UserControllers.unattendEvent);
+
+  /**
+   * @swagger
+   * /event-search:
+   *   post:
+   *     summary: search event using name and location field
+   *     description: fields are indexed for text in db to find results
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/searchEventrequest'
+   *     responses:
+   *       200:
+   *         description: successful retrieval of found event
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/displayEventResponse'
+   *       404:
+   *         description: no results
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/resError'
+   *
+   */
+  app.post('/event-search', EventsControllers.searchEvent);
 };
 module.exports = routes;

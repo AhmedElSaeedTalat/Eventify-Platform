@@ -136,3 +136,10 @@ components:
       properties:
         eventId:
           type: string
+
+    # search event by name or location
+    searchEventrequest:
+      type: object
+      properties:
+        text:
+          type: string
