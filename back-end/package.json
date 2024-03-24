@@ -32,6 +32,8 @@
     "mongodb": "^4.5.0",
     "redis": "^2.8.0",
     "sha1": "^1.1.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
     "uuid": "^8.2.0"
   },
   "devDependencies": {
@@ -44,6 +46,7 @@
     "mocha": "^6.2.2",
     "nodemon": "^2.0.2",
     "request": "^2.88.0",
-    "sinon": "^7.5.0"
+    "sinon": "^7.5.0",
+    "yaml-validator": "^5.1.0"
   }
 }

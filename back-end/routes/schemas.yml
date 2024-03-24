@@ -50,3 +50,84 @@ components:
           type: string
         sessionId:
           type: string
+
+    # insert new event
+    createEventRequestBody:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        date:
+          type: string
+        state:
+          type: string
+        location:
+          type: string
+        organizer:
+          type: string
+        category:
+          type: string
+      required:
+        - name
+        - description
+        - date
+        - state
+        - location
+        - organizer
+        - category
+
+    # succesful event creation
+    eventSuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        eventID:
+          type: string
+
+    # succesful event display
+    displayEventResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        date:
+          type: string
+        state:
+          type: string
+        location:
+          type: string
+        organizer:
+          type: string
+        category:
+          type: string
+
+    # updateEventRequest
+    updateEventRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        date:
+          type: string
+        state:
+          type: string
+        location:
+          type: string
+        organizer:
+          type: string
+        category:
+          type: string
+
+    # attendEventRequest
+    attendEventRequest:
+      type: object
+      properties:
+        eventId:
+          type: string
