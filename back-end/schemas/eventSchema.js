@@ -26,6 +26,7 @@ const createIndex = async (db) => {
   const exists = await db.collection('events').indexExists('name_1');
   if (!exists) {
     await db.collection('events').createIndex({ name: 1 }, { unique: true });
+    await db.collection('events').createIndex({ name: 'text', location: 'text' });
   }
 };
 

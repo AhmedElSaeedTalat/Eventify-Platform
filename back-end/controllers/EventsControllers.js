@@ -261,6 +261,23 @@ class EventControllers {
   }
 
   /*
+   * @searchEvent: using db search for event
+   * used createria name and location
+   *
+   * @req: request object
+   * @res: response object
+   *
+   */
+  static async searchEvent(req, res) {
+    const { text } = req.body;
+    const result = await dbInstance.db.collection('events').find({ $text: { $search: text } }).toArray();
+    if (result.length === 0) {
+      return res.status(404).json({ error: 'no result found' });
+    }
+    return res.status(200).json(result);
+  }
+
+  /*
    * @insertEvent: method to insert events
    *
    * @data: receive data to insert as argument
