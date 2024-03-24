@@ -1,4 +1,5 @@
 import React from "react";
+import "./Footer.css";
 
 const Footer = () => {
   return (
@@ -6,7 +7,9 @@ const Footer = () => {
       <div className="container">
         <div className="row">
           <div className="col-md-6">
-            <p className="mb-0">© 2024 Eventify. All Rights Reserved.</p>
+            <p className="mb-0 copyright-notice">
+              © 2024 Eventify. All Rights Reserved.
+            </p>
           </div>
           <div className="col-md-6">
             <ul className="list-unstyled d-flex justify-content-md-end">
