@@ -200,6 +200,22 @@ class EventControllers {
       { $limit: pageSize },
     ];
 
+    // query in case displaying all events sorted by price
+    const pipeStandardPrice = [
+      {
+        $lookup: {
+          from: 'category',
+          localField: 'category',
+          foreignField: '_id',
+          as: 'category',
+        },
+      },
+      { $match: { date: { $gte: new Date() } } },
+      { $sort: { price: 1 } },
+      { $skip: (page - 1) * pageSize },
+      { $limit: pageSize },
+    ];
+
     // query in case displaying events based on category and sorted by date
     const pipeCategoryDate = [
       {
@@ -216,9 +232,29 @@ class EventControllers {
       { $limit: pageSize },
     ];
 
+    // query in case displaying events based on category and sorted by price
+    const pipeCategoryPrice = [
+      {
+        $lookup: {
+          from: 'category',
+          localField: 'category',
+          foreignField: '_id',
+          as: 'category',
+        },
+      },
+      { $match: { date: { $gte: new Date() }, 'category.name': category } },
+      { $sort: { price: 1 } },
+      { $skip: (page - 1) * pageSize },
+      { $limit: pageSize },
+    ];
+
     if (category) {
-      if (sortField) {
+      if (sortField === 'date') {
         dbInstance.db.collection('events').aggregate(pipeCategoryDate).toArray().then((result) => {
+          res.status(200).json({ result });
+        });
+      } else if (sortField === 'price') {
+        dbInstance.db.collection('events').aggregate(pipeCategoryPrice).toArray().then((result) => {
           res.status(200).json({ result });
         });
       } else {
@@ -227,8 +263,12 @@ class EventControllers {
         });
       }
     } else {
-      if (sortField) {
+      if (sortField === 'date') {
         dbInstance.db.collection('events').aggregate(pipeStandardDate).toArray().then((result) => {
+          res.status(200).json({ result });
+        });
+      } else if (sortField === 'price') {
+        dbInstance.db.collection('events').aggregate(pipeStandardPrice).toArray().then((result) => {
           res.status(200).json({ result });
         });
       } else {
