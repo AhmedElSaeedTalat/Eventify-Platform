@@ -143,3 +143,33 @@ components:
       properties:
         text:
           type: string
+
+    # search event by date
+    findEventByDate:
+      type: object
+      properties:
+        date:
+          type: string
+
+    # search event by date Response
+    findEventByDateResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          description:
+            type: string
+          date:
+            type: string
+          state:
+            type: string
+          location:
+            type: string
+          organizer:
+            type: string
+          category:
+            type: string
+          price:
+            type: string

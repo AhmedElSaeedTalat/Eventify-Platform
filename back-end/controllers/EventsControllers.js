@@ -2,6 +2,8 @@ import { ObjectId } from 'mongodb';
 import CategoryControllers from './CategoryControllers';
 import UserControllers from './UserControllers';
 import dbInstance from '../utils/db';
+import sort from '../qsort';
+import search from '../search';
 /* events controllers module */
 class EventControllers {
   /*
@@ -330,6 +332,29 @@ class EventControllers {
       return res.status(404).json({ error: 'no result found' });
     }
     return res.status(200).json(result);
+  }
+
+  /*
+   * @searchEventByDate: searches events by date
+   *
+   *
+   * @req: request object
+   * @res: response object
+   *
+   * @return - response with all events with the searched date
+   *
+   */
+  static async searchEventByDate(req, res) {
+    const { date } = req.body;
+    const dateObj = new Date(date);
+    const allEvents = await dbInstance.db.collection('events').find().toArray();
+    if (allEvents.length === 0) return res.status(500).json({ error: 'something went wrong' });
+    sort(allEvents);
+    const foundEvents = search(allEvents, dateObj);
+    if (foundEvents.length > 0) {
+      return res.status(200).json(foundEvents);
+    }
+    return res.status(404).json({ error: 'no results were found' });
   }
 
   /*

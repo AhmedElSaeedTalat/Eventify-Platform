@@ -359,5 +359,34 @@ const routes = (app) => {
    *
    */
   app.post('/event-search', EventsControllers.searchEvent);
+
+  /**
+   * @swagger
+   * /find-by-date:
+   *   post:
+   *     summary: find event by date
+   *     description: post date to find relevant date
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/findEventByDate'
+   *     responses:
+   *       200:
+   *         description: successful login
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/findEventByDateResponse'
+   *       404:
+   *         description: no results found
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/resError'
+   *
+   */
+  app.post('/find-by-date', EventsControllers.searchEventByDate);
 };
 module.exports = routes;
