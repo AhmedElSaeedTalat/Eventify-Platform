@@ -1,0 +1,9 @@
+.event-details {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+}
+
+.event-details .col-md-4 {
+  align-self: center;
+}
