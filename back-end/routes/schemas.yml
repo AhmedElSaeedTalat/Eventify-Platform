@@ -143,6 +143,8 @@ components:
       properties:
         text:
           type: string
+        date:
+          type: string
 
     # search event by date
     findEventByDate:
