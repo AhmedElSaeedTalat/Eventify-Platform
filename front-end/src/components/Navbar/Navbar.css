@@ -1,5 +1,5 @@
 nav {
-  position: absolute !important;
+  position: relative !important;
   top: 0;
   left: 0;
   width: 100%;
@@ -7,11 +7,8 @@ nav {
 }
 
 @media (max-width: 992px) {
-  nav {
-    background-color: #eee;
-  }
   nav .nav-link {
-    color: black !important;
+    color: white !important;
   }
 }
 

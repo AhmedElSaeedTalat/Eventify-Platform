@@ -7,6 +7,7 @@ import { Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Home from "./components/Home/Home";
 import EventDetails from "./components/EventDetails/EventDetails";
+import EventsPage from "./components/EventsPage/EventsPage";
 
 function App() {
   const userAuth = useSelector((state) => state.auth.isLoggedIn);
@@ -16,8 +17,9 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/events" element={<EventsPage />} />
         <Route path="/eventDetails" element={<EventDetails />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/signin" element={<Login />} />
         <Route path="/register" element={<Signup />} />
       </Routes>
     </div>
