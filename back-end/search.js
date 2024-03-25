@@ -34,6 +34,4 @@ const searchRecursive = (array, value, low, high) => {
 };
 
 const search = (array, value) => searchRecursive(array, value, 0, array.length - 1);
-//const array = [15, 16, 17, 18, 18, 18, 18, 18, 19, 20, 21, 22, 23, 23, 23, 23, 24, 25];
-//console.log(search(array, 23));
 module.exports = search;
