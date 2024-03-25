@@ -326,10 +326,19 @@ class EventControllers {
    *
    */
   static async searchEvent(req, res) {
-    const { text } = req.body;
+    const { text, date } = req.body;
     const result = await dbInstance.db.collection('events').find({ $text: { $search: text } }).toArray();
     if (result.length === 0) {
       return res.status(404).json({ error: 'no result found' });
+    }
+    if (date) {
+      const dateObj = new Date(date);
+      sort(result);
+      const foundEvents = search(result, dateObj);
+      if (foundEvents.length > 0) {
+        return res.status(200).json(foundEvents);
+      }
+      return res.status(404).json({ error: 'no results were found' });
     }
     return res.status(200).json(result);
   }

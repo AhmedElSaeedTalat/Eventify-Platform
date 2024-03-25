@@ -192,7 +192,7 @@ const routes = (app) => {
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/displayEventResponse'
+   *               $ref: '#/components/schemas/findEventByDateResponse'
    *
    */
   app.get('/events', EventsControllers.displayEvents);
@@ -349,7 +349,7 @@ const routes = (app) => {
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/displayEventResponse'
+   *               $ref: '#/components/schemas/findEventByDateResponse'
    *       404:
    *         description: no results
    *         content:
