@@ -14,11 +14,26 @@ import app from '../server';
 use(chaiHttp);
 describe('test events methods', () => {
   let testSession;
+  let eventId;
   before(async () => {
     testSession = session(app);
     // regist new user to start a session
     const dataUser = { email: 'ahmedelsaeed105@gmail.com', password: '123456' };
     await testSession.post('/register').send(dataUser);
+
+    // post new event request during session to be able to retrieve
+    const data = {
+      name: 'hip hop Concert',
+      description: 'music concert',
+      location: 'lille, France',
+      organizer: 'Macx',
+      category: 'music',
+      date: '2024-04-05',
+      state: 'active',
+      price: '80',
+    };
+    const event = await testSession.post('/create-event').send(data);
+    eventId = event.body.eventID;
   });
 
   it('test post: /create-event', async () => {
@@ -29,7 +44,7 @@ describe('test events methods', () => {
       location: 'lille, France',
       organizer: 'Macx',
       category: 'career',
-      date: '2024-04-05',
+      date: '2024-04-06',
       state: 'active',
       price: '50',
     };
@@ -85,19 +100,6 @@ describe('test events methods', () => {
   });
 
   it('test get: /event/{id}', async () => {
-    // post new event request during session to be able to retrieve
-    const data = {
-      name: 'hip hop Concert',
-      description: 'music concert',
-      location: 'lille, France',
-      organizer: 'Macx',
-      category: 'music',
-      date: '2024-04-05',
-      state: 'active',
-      price: '80',
-    };
-    const event = await testSession.post('/create-event').send(data);
-    const eventId = event.body.eventID;
     // retrieve the inserted event by id
     let response = await testSession.get(`/event/${eventId}`).send();
     expect(response.statusCode).to.be.equal(200);
@@ -124,19 +126,6 @@ describe('test events methods', () => {
   });
 
   it('test put: /event-update/{ id }', async () => {
-    // post new event request during session to be able to retrieve
-    const data = {
-      name: 'gallery show for arts',
-      description: 'show art',
-      location: 'Monaco, France',
-      organizer: 'Macx',
-      category: 'art',
-      date: '2024-04-03',
-      state: 'active',
-      price: '99',
-    };
-    const event = await testSession.post('/create-event').send(data);
-    const eventId = event.body.eventID;
     // display all events filtered by category
     let dataToUpdate = { price: 100 };
     let response = await testSession.put(`/event-update/${eventId}`).send(dataToUpdate);
@@ -161,6 +150,35 @@ describe('test events methods', () => {
     response = await testSession.put(`/event-update/${eventId}`).send(dataToUpdate);
     expect(response.statusCode).to.be.equal(500);
     expect(response.body).to.deep.equal({ error: 'could\'t update price' });
+  });
+
+  it('test post: /event-search', async () => {
+    // search event by location or name
+    let data = { text: 'lille' };
+    let response = await testSession.post('/event-search').send(data);
+    expect(response.statusCode).to.be.equal(200);
+    expect(response.body.length).to.be.equal(2);
+
+    // search event by location or name and date
+    data = { text: 'lille', date: '2024-04-06' };
+    response = await testSession.post('/event-search').send(data);
+    expect(response.statusCode).to.be.equal(200);
+    expect(response.body.length).to.be.equal(1);
+  });
+
+  it('test post: /find-by-date', async () => {
+    // search event by date only
+    let data = { date: '2024-04-06' };
+    let response = await testSession.post('/find-by-date').send(data);
+    expect(response.statusCode).to.be.equal(200);
+    expect(response.body.length).to.be.equal(1);
+    expect(response.body[0].name).to.be.equal('lecture programming');
+
+    // case no events corresponding to that date
+    data = { date: '2024-02-06' };
+    response = await testSession.post('/find-by-date').send(data);
+    expect(response.statusCode).to.be.equal(404);
+    expect(response.body).to.deep.equal({ error: 'no results were found' });
   });
 
   /*
