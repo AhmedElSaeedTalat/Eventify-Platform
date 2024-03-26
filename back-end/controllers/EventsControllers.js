@@ -105,7 +105,7 @@ class EventControllers {
     const currentDate = new Date();
     for (const [key, value] of Object.entries(passedData)) {
       if (!acceptedFields.includes(key)) {
-        return res.status(500).json({ error: 'field can\'t be updated' });
+        return res.status(500).json({ error: `${key} field cant be updated` });
       }
       // convert date string to date object and make sure its valid
       if (key === 'date') {
