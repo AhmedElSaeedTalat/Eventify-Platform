@@ -17,6 +17,13 @@ class EventControllers {
     if (!req.session.authenticated) {
       return res.status(401).json({ error: 'you must be authenticated to create event' });
     }
+    const acceptedFields = ['name', 'description', 'date', 'location', 'organizer', 'state', 'price'];
+    const keys = Object.keys(req.body);
+    for (const field of acceptedFields) {
+      if (!keys.includes(field)) {
+        return res.status(404).json({ error: `couldnt insert event check missing field ${field}` });
+      }
+    }
     const {
       name,
       description,
@@ -28,10 +35,7 @@ class EventControllers {
       price,
     } = req.body;
     const createrId = req.session.userId;
-    // check if date of event passed and is valid
-    if (!date) {
-      return res.status(404).json({ error: 'date of event wasnt passed' });
-    }
+    // check if date of event is valid
     const dateObj = new Date(date);
     const currentDate = new Date();
     if (currentDate > dateObj) {
@@ -68,7 +72,7 @@ class EventControllers {
     if (eventId === -1) {
       return res.status(500).json({ error: 'couldn\'t insert event check missing fields' });
     }
-    return res.status(201).json({ messege: 'successfully added event', eventID: eventId });
+    return res.status(201).json({ message: 'successfully added event', eventID: eventId });
   }
 
   /*
