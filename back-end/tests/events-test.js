@@ -181,6 +181,33 @@ describe('test events methods', () => {
     expect(response.body).to.deep.equal({ error: 'no results were found' });
   });
 
+  it('test post: /attend-event', async () => {
+    // register for event
+    const data = { eventId };
+    const response = await testSession.post('/attend-event').send(data);
+    expect(response.statusCode).to.be.equal(200);
+    expect(response.body).to.deep.equal({ message: 'sucessfully attending event' });
+  });
+
+  it('test get: /user-events', async () => {
+    // test displaying events user is attending
+    const response = await testSession.get('/user-events').send();
+    expect(response.statusCode).to.be.equal(200);
+    expect(response.body.events.length).to.be.equal(1);
+  });
+
+  it('test get: /unattend-event/{ eventId }', async () => {
+    // remove relations ship between user and event
+    let response = await testSession.get(`/unattend-event/${eventId}`).send();
+    expect(response.statusCode).to.be.equal(200);
+    expect(response.body).to.deep.equal({ message: 'successfully removed event from events user is attending' });
+
+    // show events user attending after removing event from users data
+    response = await testSession.get('/user-events').send();
+    expect(response.statusCode).to.be.equal(404);
+    expect(response.body).to.deep.equal({ error: 'no events found' });
+  });
+
   /*
    * @after: after hook to delete created
    * user for the sake of the test

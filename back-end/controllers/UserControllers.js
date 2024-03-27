@@ -52,7 +52,7 @@ class UserControllers {
           },
       },
     ]).toArray().then((result) => {
-      if (result.length > 0) {
+      if (result[0].events.length > 0) {
         return res.status(200).json({ events: result[0].events });
       }
       return res.status(404).json({ error: 'no events found' });
