@@ -1,0 +1,17 @@
+.user-profile {
+  margin-top: 65.5px;
+}
+
+.user-profile .links-container {
+}
+
+.user-profile .links-container a {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-right: 10px;
+  transition: 0.3s ease-in-out color;
+}
+
+.user-profile .links-container a:hover {
+  color: var(--main-color) !important;
+}
