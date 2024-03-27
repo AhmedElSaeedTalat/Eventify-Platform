@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import EventCard from "../EventCard/EventCard";
 import Pagination from "./Pagination";
+import "./EventsPage.css";
 
 const events = [
   {
@@ -108,7 +109,7 @@ const EventsPage = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container events-page">
       <h1>Events</h1>
       {/* Filters */}
       <div className="row mb-4">
