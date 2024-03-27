@@ -22,9 +22,9 @@ using sort and search algorithm.
 - A test feature is included to test different cases using Mocha and chai packages.
 
 ## Routes
-- /api-docs: the main route used to show details of api endpoints used.
-in this swagger package is used to facilitate the display and of the end points used in a
-detatiled wayt including expected request parameters used and response content.
+- /api-docs: the main route used to show the details of the api endpoints used.
+Swagger package is used to facilitate the display of the end points used in a
+detatiled way, including expected request parameters and response content.
   
 
 ## Technologies
