@@ -6,7 +6,8 @@ import "./UserProfilePage.css";
 import UserProfile from "./UserProfile";
 
 const UserProfilePage = () => {
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const isLoggedIn = useSelector((state) => state);
+  console.log(isLoggedIn);
   const location = useLocation();
 
   const isUserProfileRoute =
