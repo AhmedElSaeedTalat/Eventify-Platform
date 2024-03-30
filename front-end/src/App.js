@@ -11,7 +11,7 @@ import EventsPage from "./components/EventsPage/EventsPage";
 import UserProfilePage from "./components/userProfileComponents/UserProfilePage";
 import NotFoundPage from "./components/NotFoundPage/NotFoundPage";
 import CreateEvent from "./components/userProfileComponents/CreateEvent";
-import UpdateProfile from "./components/userProfileComponents/UpdateProfile";
+import UpdateEvent from "./components/userProfileComponents/UpdateEvent";
 
 function App() {
   const userAuth = useSelector((state) => state.auth.isLoggedIn);
@@ -27,7 +27,7 @@ function App() {
         <Route path="register" element={<Signup />} />
         <Route path="user-profile" element={<UserProfilePage />}>
           <Route path="create-event" element={<CreateEvent />} />
-          <Route path="update-profile" element={<UpdateProfile />} />
+          <Route path="update-event" element={<UpdateEvent />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
