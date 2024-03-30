@@ -1,20 +1,12 @@
 import { useState } from "react";
 
-const CreateEventPage = () => {
-  const [eventData, setEventData] = useState({
-    title: "",
-    date: "",
-    location: "",
-    description: "",
-    imageSrc: "",
-    price: 0,
-  });
-
+const UpdateEvent = ({ eventData }) => {
+  const [updatedEventData, setUpdatedEventData] = useState({ ...eventData });
   const [imageFile, setImageFile] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setEventData((prevData) => ({
+    setUpdatedEventData((prevData) => ({
       ...prevData,
       [name]: name === "price" ? parseFloat(value) : value, // Convert price to number
     }));
@@ -27,16 +19,16 @@ const CreateEventPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Perform any action with the eventData, such as sending it to a server
-    console.log("Event data submitted:", eventData);
+    // Perform any action with the updatedEventData, such as sending it to a server
+    console.log("Updated event data submitted:", updatedEventData);
   };
 
   const minDate = new Date();
   minDate.setDate(minDate.getDate() + 1); // Add one day to today's date
 
   return (
-    <div className="container create-event">
-      <h2 className="mt-4 mb-3">Create Event</h2>
+    <div className="container update-event">
+      <h2 className="mt-4 mb-3">Update Event</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="title" className="form-label">
@@ -47,7 +39,7 @@ const CreateEventPage = () => {
             className="form-control"
             id="title"
             name="title"
-            value={eventData.title}
+            value={updatedEventData.title}
             onChange={handleChange}
             required
           />
@@ -61,7 +53,7 @@ const CreateEventPage = () => {
             className="form-control"
             id="date"
             name="date"
-            value={eventData.date}
+            value={updatedEventData.date}
             onChange={handleChange}
             min={minDate.toISOString().split("T")[0]} // Minimum date is tomorrow
             required
@@ -76,7 +68,7 @@ const CreateEventPage = () => {
             className="form-control"
             id="location"
             name="location"
-            value={eventData.location}
+            value={updatedEventData.location}
             onChange={handleChange}
             required
           />
@@ -89,7 +81,7 @@ const CreateEventPage = () => {
             className="form-control"
             id="description"
             name="description"
-            value={eventData.description}
+            value={updatedEventData.description}
             onChange={handleChange}
             required
           />
@@ -116,17 +108,17 @@ const CreateEventPage = () => {
             className="form-control"
             id="price"
             name="price"
-            value={eventData.price}
+            value={updatedEventData.price}
             onChange={handleChange}
             required
           />
         </div>
         <button type="submit" className="btn btn-primary">
-          Create Event
+          Update Event
         </button>
       </form>
     </div>
   );
 };
 
-export default CreateEventPage;
+export default UpdateEvent;
