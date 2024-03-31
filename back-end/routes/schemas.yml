@@ -175,3 +175,20 @@ components:
             type: string
           price:
             type: string
+          type: string
+
+    # insert category request
+    insertCategoryReq:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+
+    # insert category response
+    insertCategoryRes:
+      type: object
+      properties:
+        id:
+          type: string

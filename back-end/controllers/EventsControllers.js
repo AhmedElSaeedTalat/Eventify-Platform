@@ -311,7 +311,7 @@ class EventControllers {
     }
     const updatedUser = await dbInstance.db.collection('users').updateOne({ _id: ObjectId(userId) }, { $push: { eventIds: ObjectId(eventId) } });
     if (updatedUser.modifiedCount !== 1) {
-      return res.status(500).json({ error: 'coudn\'t be modifed' });
+      return res.status(500).json({ error: 'coudn\'t be modifed 1' });
     }
     // add reference to user reference to event
     const updatedEvent = await dbInstance.db.collection('events').updateOne({ _id: ObjectId(eventId) }, { $push: { attendees: ObjectId(userId) } });

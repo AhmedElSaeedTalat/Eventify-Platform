@@ -1,4 +1,3 @@
-import { ObjectId } from 'mongodb';
 /* event schema */
 
 /*
@@ -39,7 +38,7 @@ const createCategoryCollection = async (db) => {
     validator: {
       $jsonSchema: {
         bsonType: 'object',
-        required: ['name', 'description'],
+        required: ['name'],
         properties: {
           name: {
             bsonType: 'string',
@@ -47,7 +46,6 @@ const createCategoryCollection = async (db) => {
           },
           description: {
             bsonType: 'string',
-            description: 'Description is a required field',
           },
         },
       },
