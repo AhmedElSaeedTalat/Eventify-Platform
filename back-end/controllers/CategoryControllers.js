@@ -21,12 +21,13 @@ class CategoryControllers {
    *
    * @data: data passed
    *
-   * return - id for the inserted user
+   * return - id for the inserted category
    */
-  static async insertUser(data) {
+  static async insertCategory(req, res) {
+    const data = req.body;
     const collection = await dbInstance.db.collection('category');
     const category = await collection.insertOne(data);
-    return category.insertedId;
+    res.json({ id: category.insertedId });
   }
 }
 module.exports = CategoryControllers;

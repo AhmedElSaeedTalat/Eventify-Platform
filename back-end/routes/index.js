@@ -2,6 +2,7 @@ import MainControllers from '../controllers/MainControllers';
 import AuthControllers from '../controllers/AuthControllers';
 import EventsControllers from '../controllers/EventsControllers';
 import UserControllers from '../controllers/UserControllers';
+import CategoryControllers from '../controllers/CategoryControllers';
 /* adding routes */
 const routes = (app) => {
 /**
@@ -388,5 +389,34 @@ const routes = (app) => {
    *
    */
   app.post('/find-by-date', EventsControllers.searchEventByDate);
+
+  /**
+   * @swagger
+   * /insert-category:
+   *   post:
+   *     summary: insert category using name and description
+   *     description: post data
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/insertCategoryReq'
+   *     responses:
+   *       201:
+   *         description: successful registration
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/insertCategoryRes'
+   *       400:
+   *         description: error message missing email - Missing password - Email already exists
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/resError'
+   *
+   */
+  app.post('/insert-category', CategoryControllers.insertCategory);
 };
 module.exports = routes;
