@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const baseURL = "http://localhost:4444";
+const baseURL = "http://localhost:5001"; // Updated API URL
 
 const initialState = {
   events: [],
@@ -9,35 +9,63 @@ const initialState = {
   error: null,
 };
 
+// Function to handle displaying toast notifications
+const showToast = (message, isError = false) => {
+  console.log(`Toast: ${message}`);
+};
+
 export const fetchEvents = createAsyncThunk("events/fetchEvents", async () => {
-  const response = await axios.get(`${baseURL}/events`);
-  return response.data;
+  try {
+    const response = await axios.get(`${baseURL}/events`);
+    return response.data;
+  } catch (error) {
+    showToast("Failed to fetch events", true);
+    throw error;
+  }
 });
 
 export const addEvent = createAsyncThunk(
   "events/addEvent",
   async (eventData) => {
-    const response = await axios.post(`${baseURL}/events`, eventData);
-    return response.data;
+    try {
+      const response = await axios.post(`${baseURL}/create-event`, eventData);
+      showToast("Event added successfully");
+      return response.data;
+    } catch (error) {
+      showToast("Failed to add event", true);
+      throw error;
+    }
   }
 );
 
 export const updateEvent = createAsyncThunk(
   "events/updateEvent",
   async (eventData) => {
-    const response = await axios.put(
-      `${baseURL}/events/${eventData.id}`,
-      eventData
-    );
-    return response.data;
+    try {
+      const response = await axios.put(
+        `${baseURL}/events/${eventData.id}`,
+        eventData
+      );
+      showToast("Event updated successfully");
+      return response.data;
+    } catch (error) {
+      showToast("Failed to update event", true);
+      throw error;
+    }
   }
 );
 
 export const deleteEvent = createAsyncThunk(
   "events/deleteEvent",
   async (eventId) => {
-    await axios.delete(`${baseURL}/events/${eventId}`);
-    return eventId;
+    try {
+      await axios.delete(`${baseURL}/events/${eventId}`);
+      showToast("Event deleted successfully");
+      return eventId;
+    } catch (error) {
+      showToast("Failed to delete event", true);
+      throw error;
+    }
   }
 );
 
