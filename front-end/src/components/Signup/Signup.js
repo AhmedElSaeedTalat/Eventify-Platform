@@ -1,45 +1,49 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { loginSuccess } from "../../reduxToolkit/slices/authSlice"; // Import the loginSuccess action
-import "./Signup.css";
+import { useDispatch } from "react-redux";
+import { loginFailure } from "../../reduxToolkit/slices/authSlice";
+import { toast } from "react-toastify";
 
 const SignupForm = () => {
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
-
-  console.log(isLoggedIn);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
 
     try {
-      // Make POST request to server to create new user
-      // const response = await axios.post("/register", { email, password });
-      // console.log(response.data); // Log response from server
+      const response = await axios.post("http://localhost:5001/register", {
+        email,
+        password,
+      });
 
-      // Dispatch the loginSuccess action upon successful signup
-      dispatch(loginSuccess("Osama")); // Assuming response.data contains user information
-
-      // Reset form fields after successful submission
-      setEmail("");
-      setPassword("");
-      setConfirmPassword("");
-      setError("");
-
-      navigate("/");
+      toast.success(`User registered successfully`);
+      navigate("/signin");
     } catch (error) {
       console.error("Error creating user:", error);
+      dispatch(loginFailure());
+      if (error.response && error.response.data) {
+        // If error.response.data exists and it's an object, convert it to a string
+        const errorMessage =
+          typeof error.response.data === "object"
+            ? JSON.stringify(error.response.data)
+            : error.response.data;
+        let errorMsg = JSON.parse(errorMessage);
+        toast.error(`Signup failed. ${errorMsg.error}. Please try again.`);
+      } else {
+        // If error.response.data does not exist or it's not an object, display a generic error message
+        toast.error(
+          "Signup failed. An unexpected error occurred. Please try again."
+        );
+      }
     }
   };
 
