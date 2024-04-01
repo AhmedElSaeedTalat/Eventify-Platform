@@ -31,8 +31,11 @@ app.use(printMethod);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  origin: ['http://localhost:3001'],
+  origin: 'http://localhost:3001',
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
 }));
+app.options('*', cors());
 app.use(session({
   store,
   secret: v4(),
