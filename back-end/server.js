@@ -30,11 +30,23 @@ const printMethod = (req, res, next) => {
 app.use(printMethod);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(
-  cors({
-    origin: ["http://localhost:3000"],
-  })
-);
+app.use(cors({
+  origin: 'http://localhost:3001',
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+}));
+app.options('*', cors());
+app.use(session({
+  store,
+  secret: v4(),
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 7200000,
+    secure: false,
+    httpOnly: true,
+  },
+}));
 app.use(
   session({
     store,
