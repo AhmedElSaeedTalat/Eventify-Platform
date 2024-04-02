@@ -1,7 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const baseURL = "http://localhost:5001"; // Updated API URL
+// Ensure that cookies are sent with requests
+axios.defaults.withCredentials = true;
+
+const baseURL = "http://localhost:5001";
 
 const initialState = {
   events: [],
