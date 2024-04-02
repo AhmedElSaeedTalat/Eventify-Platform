@@ -33,7 +33,6 @@ function Login() {
 
       // Save session ID in session storage
       sessionStorage.setItem("sessionId", sessionId);
-      console.log("Session ID:", sessionId);
 
       // Show success toast notification
       toast.success(message);
@@ -54,6 +53,7 @@ function Login() {
   return (
     <div className="auth-form container">
       <form className="login-form">
+        <h2 className="signin-header">Sign In</h2>
         <div className="mb-3">
           <label htmlFor="exampleInputEmail1" className="form-label">
             Email address
@@ -82,7 +82,7 @@ function Login() {
           type="submit"
           className="btn btn-primary"
         >
-          Submit
+          Sign In
         </button>
       </form>
     </div>

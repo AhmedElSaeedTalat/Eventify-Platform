@@ -33,3 +33,18 @@ nav .auth {
 nav .nav-item {
   font-size: 17px;
 }
+
+nav .nav-logout-btn {
+  background-color: #dc3545;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 0.25rem;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+nav .nav-logout-btn:hover {
+  background-color: #c82333;
+}
