@@ -1,3 +1,5 @@
+import multer from 'multer';
+import { v4 } from 'uuid';
 import MainControllers from '../controllers/MainControllers';
 import AuthControllers from '../controllers/AuthControllers';
 import EventsControllers from '../controllers/EventsControllers';
@@ -131,7 +133,18 @@ const routes = (app) => {
    *               $ref: '#/components/schemas/resError'
    *
    */
-  app.post('/create-event', EventsControllers.createEvent);
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, './uploads');
+    },
+    filename: (req, file, cb) => {
+      const randomString = v4();
+      const editedName = `${randomString}.${file.originalname.split('.')[1]}`;
+      cb(null, editedName);
+    },
+  });
+  const upload = multer({ storage });
+  app.post('/create-event', upload.single('image'), EventsControllers.createEvent);
 
   /**
    * @swagger

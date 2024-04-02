@@ -34,6 +34,7 @@ class EventControllers {
       category,
       price,
     } = req.body;
+    const image = req.file.filename;
     const createrId = req.session.userId;
     // check if date of event is valid
     const dateObj = new Date(date);
@@ -67,6 +68,7 @@ class EventControllers {
       state,
       price: convertPrice,
       category: categoryId,
+      image,
     };
     const eventId = await EventControllers.insertEvent(data);
     if (eventId === -1) {

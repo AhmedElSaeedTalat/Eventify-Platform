@@ -78,6 +78,9 @@ const createEventCollection = async (db) => {
             bsonType: 'int',
             description: 'price is a required field, event price ticket',
           },
+          image: {
+            bsonType: 'string',
+          },
           attendees: {
             bsonType: 'array',
             items: {
