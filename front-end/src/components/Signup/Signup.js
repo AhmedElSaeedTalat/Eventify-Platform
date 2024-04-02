@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginFailure } from "../../reduxToolkit/slices/authSlice";
 import { toast } from "react-toastify";
+import "./Signup.css";
 
 const SignupForm = () => {
   const dispatch = useDispatch();
