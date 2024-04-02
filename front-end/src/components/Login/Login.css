@@ -1,0 +1,21 @@
+/* body {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
+
+.login-form {
+  width: 300px;
+  background-color: #dee2e6;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.auth-form {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,24 +1,24 @@
-import express from 'express';
-import session from 'express-session';
-import { v4 } from 'uuid';
-import swaggerJsdoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
-import RedisStore from 'connect-redis';
-import { createClient } from 'redis';
-import cors from 'cors';
-import dbInstance from './utils/db';
-import routes from './routes/index';
+import express from "express";
+import session from "express-session";
+import { v4 } from "uuid";
+import swaggerJsdoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
+import RedisStore from "connect-redis";
+import { createClient } from "redis";
+import cors from "cors";
+import dbInstance from "./utils/db";
+import routes from "./routes/index";
 /* module to start the server */
 
 let store;
 const app = express();
 const client = createClient({
-  host: 'localhost',
+  host: "localhost",
   port: 6379,
 });
 
-client.on('connect', () => {
-  console.log('connected to redis');
+client.on("connect", () => {
+  console.log("connected to redis");
   store = new RedisStore({ client });
 });
 const printMethod = (req, res, next) => {
@@ -47,26 +47,39 @@ app.use(session({
     httpOnly: true,
   },
 }));
+app.use(
+  session({
+    store,
+    secret: v4(),
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 7200000,
+      secure: false,
+      httpOnly: true,
+    },
+  })
+);
 
 /* swagger setup */
 const options = {
   definition: {
-    openapi: '3.0.0',
+    openapi: "3.0.0",
     info: {
-      title: 'Eventify Api',
-      version: '1.0.0',
-      description: 'Eventify platform api',
+      title: "Eventify Api",
+      version: "1.0.0",
+      description: "Eventify platform api",
     },
     servers: [
       {
-        url: 'http://localhost:5001',
+        url: "http://localhost:5001",
       },
     ],
   },
-  apis: ['./routes/*.js', './routes/*.yml'],
+  apis: ["./routes/*.js", "./routes/*.yml"],
 };
 const specs = swaggerJsdoc(options);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 /* routes */
 routes(app);
@@ -74,7 +87,7 @@ routes(app);
 /* listen to server */
 app.listen(5001, (err) => {
   if (!err) {
-    console.log('started server at port 5001');
+    console.log("started server at port 5001");
   }
 });
 module.exports = app;
