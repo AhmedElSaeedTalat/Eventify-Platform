@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addEvent } from "../../reduxToolkit/slices/EventSlice";
 
@@ -7,34 +7,52 @@ const CreateEventPage = () => {
     name: "",
     description: "",
     date: "",
-    state: "",
+    state: "Active",
     location: "",
     organizer: "",
     category: "",
     price: 0,
+    image: null,
   });
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEventData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    const { name, value, files } = e.target;
+
+    if (name === "image") {
+      setEventData((prevData) => ({
+        ...prevData,
+        [name]: files[0],
+      }));
+    } else {
+      setEventData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addEvent(eventData));
+    // Create a FormData object to handle file uploads
+    const formData = new FormData();
+    // Append all event data to FormData
+    Object.entries(eventData).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+    // Dispatch addEvent with FormData containing all event data
+    dispatch(addEvent(formData));
+
     setEventData({
       name: "",
       description: "",
       date: "",
-      state: "",
+      state: "Active",
       location: "",
       organizer: "",
       category: "",
       price: 0,
+      image: null,
     });
   };
 
@@ -61,6 +79,7 @@ const CreateEventPage = () => {
     "Technology",
     "Travel & Outdoor",
     "Writing",
+    "Weddings",
   ];
 
   const tomorrow = new Date();
@@ -117,15 +136,17 @@ const CreateEventPage = () => {
           <label htmlFor="state" className="form-label">
             State:
           </label>
-          <input
-            type="text"
-            className="form-control"
+          <select
+            className="form-select"
             id="state"
             name="state"
             value={eventData.state}
             onChange={handleChange}
             required
-          />
+          >
+            <option value="Active">Active</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
         </div>
         <div className="mb-3">
           <label htmlFor="location" className="form-label">
@@ -176,6 +197,20 @@ const CreateEventPage = () => {
           </select>
         </div>
         <div className="mb-3">
+          <label htmlFor="image" className="form-label">
+            Image:
+          </label>
+          <input
+            type="file"
+            className="form-control"
+            id="image"
+            name="image"
+            accept="image/*"
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
           <label htmlFor="price" className="form-label">
             Price:
           </label>
@@ -187,7 +222,7 @@ const CreateEventPage = () => {
             value={eventData.price}
             onChange={handleChange}
             required
-            min="0" // Set minimum value to 0
+            min="0"
           />
         </div>
         <button type="submit" className="btn btn-primary">
