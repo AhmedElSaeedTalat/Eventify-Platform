@@ -373,6 +373,20 @@ class EventControllers {
   }
 
   /*
+   * @deleteEvent: delete events based on
+   * id passed as param
+   *
+   * @req: request object
+   * @res: response object
+   */
+  static async deleteEvent(req, res) {
+    const { id } = req.params;
+    const response = await dbInstance.db.collection('events').deleteOne({ _id: ObjectId(id) });
+    console.log(response);
+    return res.status(204).send();
+  }
+
+  /*
    * @insertEvent: method to insert events
    *
    * @data: receive data to insert as argument
