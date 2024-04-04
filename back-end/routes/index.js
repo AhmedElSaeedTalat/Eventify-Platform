@@ -462,5 +462,33 @@ const routes = (app) => {
    *
    */
   app.delete('/event-delete/:id', EventsControllers.deleteEvent);
+  /**
+   * @swagger
+   * /my-events:
+   *   get:
+   *     summary: show events that user has created
+   *     description: show events user has  created
+   *     responses:
+   *       200:
+   *         description: successful retrieval
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/findEventByDateResponse'
+   *       401:
+   *         description: error must be authenticated to check events
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/resError'
+   *       404:
+   *         description: no events found
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/resError'
+   *
+   */
+  app.get('/my-events', UserControllers.showEventsByCreation);
 };
 module.exports = routes;
