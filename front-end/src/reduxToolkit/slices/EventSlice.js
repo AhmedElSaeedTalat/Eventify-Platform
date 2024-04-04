@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 // Ensure that cookies are sent with requests
 axios.defaults.withCredentials = true;
@@ -15,6 +16,11 @@ const initialState = {
 // Function to handle displaying toast notifications
 const showToast = (message, isError = false) => {
   console.log(`Toast: ${message}`);
+  if (isError) {
+    toast.error(message);
+  } else {
+    toast.success(message);
+  }
 };
 
 export const fetchEvents = createAsyncThunk("events/fetchEvents", async () => {
@@ -83,7 +89,7 @@ const eventSlice = createSlice({
       })
       .addCase(fetchEvents.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.events = action.payload;
+        state.events = action.payload.result;
       })
       .addCase(fetchEvents.rejected, (state, action) => {
         state.status = "failed";

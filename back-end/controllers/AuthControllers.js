@@ -55,7 +55,7 @@ class AuthController {
     }
     req.session.authenticated = true;
     req.session.userId = user._id.toString();
-    return res.status(200).json({ message: 'user got logged in', sessionId: req.sessionID });
+    return res.status(200).json({ message: 'user got logged in', sessionId: req.sessionID, userId: user._id.toString() });
   }
 
   /*

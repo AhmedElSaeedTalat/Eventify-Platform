@@ -11,6 +11,10 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    setUnauthorized(state) {
+      state.isLoggedIn = false;
+      console.log("User unauthorized:", state);
+    },
     login(state) {
       state.isLoading = true;
     },
@@ -34,7 +38,13 @@ const authSlice = createSlice({
   },
 });
 
-export const { login, loginSuccess, loginFailure, logout, setSessionId } =
-  authSlice.actions;
+export const {
+  login,
+  loginSuccess,
+  loginFailure,
+  logout,
+  setSessionId,
+  setUnauthorized,
+} = authSlice.actions;
 
 export default authSlice.reducer;
