@@ -80,6 +80,9 @@ const createEventCollection = async (db) => {
           image: {
             bsonType: 'string',
           },
+          imagePath: {
+            bsonType: 'string',
+          },
           attendees: {
             bsonType: 'array',
             items: {

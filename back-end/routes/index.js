@@ -432,6 +432,35 @@ const routes = (app) => {
    *
    */
   app.post('/insert-category', CategoryControllers.insertCategory);
-  app.delete('/delete-event/:id', EventsControllers.deleteEvent);
+  /**
+   * @swagger
+   * event-description/{id}:
+   *   delete:
+   *     summary: delete event
+   *     description: delete event
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         description: event id
+   *         schema:
+   *           type: integer
+   *     responses:
+   *       204:
+   *         description: successful deletion
+   *       404:
+   *         description: error cant find event
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/resError'
+   *       401:
+   *         description: error you must be authenticated and the creater of the event to delete
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/resError'
+   *
+   */
+  app.delete('/event-delete/:id', EventsControllers.deleteEvent);
 };
 module.exports = routes;
