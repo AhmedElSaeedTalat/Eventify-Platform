@@ -2,6 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
+// TODO Check if the user is the eventCreator to remove the attend button
+// TODO Check if the user is already attending the event to show the unattend button
+
 const EventCard = ({
   _id,
   name,
@@ -11,6 +14,7 @@ const EventCard = ({
   image,
   price,
   state,
+  attendees,
 }) => {
   // Format date
   const formattedDate = new Date(date).toLocaleString(undefined, {
@@ -62,6 +66,9 @@ const EventCard = ({
         <p className={`card-text ${stateColor}`}>
           <strong>State:</strong> {state}
         </p>
+        <p className="card-text">
+          <strong>Attendees:</strong> {attendees ? attendees.length : 0}
+        </p>{" "}
         <Link
           to={`event-details/${_id}`}
           className="btn btn-primary d-block mx-auto mt-2"
