@@ -175,7 +175,6 @@ components:
             type: string
           price:
             type: string
-          type: string
 
     # insert category request
     insertCategoryReq:

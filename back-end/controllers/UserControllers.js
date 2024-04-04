@@ -60,6 +60,36 @@ class UserControllers {
   }
 
   /*
+   * @showEventsByCreation: show events that the user created
+   *
+   * @req: request object
+   * @res: response object
+   *
+   * @return - events that user is attending or 404
+   */
+  static async showEventsByCreation(req, res) {
+    if (!req.session.authenticated) {
+      return res.status(401).json({ error: 'you must be authenticated to check your events' });
+    }
+    dbInstance.db.collection('events').aggregate([
+      { $match: { createrId: req.session.userId } },
+      {
+        $lookup:
+          {
+            from: 'category',
+            localField: 'category',
+            foreignField: '_id',
+            as: 'category',
+          },
+      },
+    ]).toArray().then((result) => {
+      if (result.length > 0) {
+        return res.status(200).json({ events: result });
+      }
+      return res.status(404).json({ error: 'no events found' });
+    });
+  }
+  /*
    * @unattendEvent: remove event's reference from user
    *
    * @req: request object
