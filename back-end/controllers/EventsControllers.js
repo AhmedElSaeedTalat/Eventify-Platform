@@ -92,6 +92,7 @@ class EventControllers {
       price: convertPrice,
       category: categoryId,
       image,
+      imagePath: filePath,
     };
     const eventId = await EventControllers.insertEvent(data);
     if (eventId === -1) {
@@ -372,7 +373,27 @@ class EventControllers {
    * @res: response object
    */
   static async deleteEvent(req, res) {
+    if (!req.session.authenticated) {
+      return res
+        .status(401)
+        .json({ error: 'you must be authenticated to delete the event' });
+    }
     const { id } = req.params;
+    /* check if event exists */
+    const evnt = await EventControllers.findEvent({ _id: ObjectId(id) });
+    if (!evnt) {
+      return res.status(404).json({ error: "can't find event" });
+    }
+
+    /* check if the user attempting to delete the
+     * event is the one who created it
+     */
+    if (evnt.createrId !== req.session.userId) {
+      return res
+        .status(401)
+        .json({ error: 'you must be the event creater to delete the event' });
+    }
+    await EventControllers.deleteUploadedFile(evnt.imagePath);
     const response = await dbInstance.db.collection('events').deleteOne({ _id: ObjectId(id) });
     console.log(response);
     return res.status(204).send();
