@@ -5,7 +5,6 @@ import "./EventDetails.css";
 
 const EventDetailsPage = () => {
   const { eventId } = useParams();
-  console.log(eventId);
   const [attending, setAttending] = useState(false);
   const [eventData, setEventData] = useState({});
 
@@ -21,6 +20,13 @@ const EventDetailsPage = () => {
       });
   }, [eventId]);
 
+  useEffect(() => {
+    // Check if the user is attending the event when the component mounts
+    // This could be done based on some user authentication or session data
+    // For now, let's assume attending is set to false by default
+    setAttending(false);
+  }, []);
+
   const handleAttendClick = () => {
     setAttending(true);
     axios
@@ -33,8 +39,16 @@ const EventDetailsPage = () => {
       });
   };
 
-  const handleCancelClick = () => {
+  const handleUnattendClick = () => {
     setAttending(false);
+    axios
+      .get(`http://localhost:5001/unattend-event/${eventId}`)
+      .then((response) => {
+        console.log("Unattend event response:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error unattending event:", error);
+      });
   };
 
   return (
@@ -60,13 +74,12 @@ const EventDetailsPage = () => {
                 <p className="card-text">Category: Any category</p>{" "}
                 {/* Default category */}
                 <p className="card-text">Organizer: {eventData.organizer}</p>
-                <p className="card-text">Contact: {eventData.contact}</p>
                 {attending ? (
                   <button
                     className="btn btn-danger"
-                    onClick={handleCancelClick}
+                    onClick={handleUnattendClick}
                   >
-                    Cancel
+                    Unattend
                   </button>
                 ) : (
                   <button
