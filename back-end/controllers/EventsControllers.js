@@ -1,3 +1,4 @@
+import fs from 'fs';
 import { ObjectId } from "mongodb";
 import CategoryControllers from "./CategoryControllers";
 import UserControllers from "./UserControllers";
@@ -14,7 +15,10 @@ class EventControllers {
    *
    */
   static async createEvent(req, res) {
+    const image = req.file.filename;
+    const filePath = req.file.path;
     if (!req.session.authenticated) {
+      await EventControllers.deleteUploadedFile(filePath);
       return res
         .status(401)
         .json({ error: "you must be authenticated to create event" });
@@ -31,6 +35,7 @@ class EventControllers {
     const keys = Object.keys(req.body);
     for (const field of acceptedFields) {
       if (!keys.includes(field)) {
+        await EventControllers.deleteUploadedFile(filePath);
         return res
           .status(404)
           .json({ error: `couldnt insert event check missing field ${field}` });
@@ -51,6 +56,7 @@ class EventControllers {
     const dateObj = new Date(date);
     const currentDate = new Date();
     if (currentDate > dateObj) {
+      await EventControllers.deleteUploadedFile(filePath);
       return res.status(500).json({ error: "please provide a valid date" });
     }
     let categoryId;
@@ -62,6 +68,7 @@ class EventControllers {
     if (categoryDocument) {
       categoryId = categoryDocument._id;
     } else {
+      await EventControllers.deleteUploadedFile(filePath);
       return res
         .status(404)
         .json({ error: "please send a valid category name" });
@@ -70,9 +77,9 @@ class EventControllers {
     if (!Number.isNaN(price) && Number.isInteger(Number(price))) {
       convertPrice = Number(price);
     } else {
+      await EventControllers.deleteUploadedFile(filePath);
       return res.status(500).json({ error: "could't insert price" });
     }
-    const image = req.file.filename;
     // send data to db
     const data = {
       name,
@@ -88,6 +95,7 @@ class EventControllers {
     };
     const eventId = await EventControllers.insertEvent(data);
     if (eventId === -1) {
+      await EventControllers.deleteUploadedFile(filePath);
       return res
         .status(500)
         .json({ error: "couldn't insert event check missing fields" });
@@ -98,12 +106,22 @@ class EventControllers {
   }
 
   /*
+   * @deleteUploadedFile: delete uploaded file in case of error
    *
-   *
+   * @file: file path
    *
    */
-  static Async deleteUploadedFile() {
-
+  static async deleteUploadedFile(file) {
+    try {
+      await fs.promises.access(file, fs.constants.F_OK);
+      await fs.unlink(file, (err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   /*
