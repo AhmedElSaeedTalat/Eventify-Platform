@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addEvent } from "../../reduxToolkit/slices/EventSlice";
+import { setUnauthorized } from "../../reduxToolkit/slices/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const CreateEventPage = () => {
   const [eventData, setEventData] = useState({
@@ -14,7 +16,9 @@ const CreateEventPage = () => {
     price: 0,
     image: null,
   });
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -32,30 +36,27 @@ const CreateEventPage = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Create a FormData object to handle file uploads
     const formData = new FormData();
-    // Append all event data to FormData
+
     Object.entries(eventData).forEach(([key, value]) => {
       formData.append(key, value);
     });
-    // Dispatch addEvent with FormData containing all event data
-    dispatch(addEvent(formData));
 
-    setEventData({
-      name: "",
-      description: "",
-      date: "",
-      state: "Active",
-      location: "",
-      organizer: "",
-      category: "",
-      price: 0,
-      image: null,
-    });
+    try {
+      await dispatch(addEvent(formData));
+      navigate("/events");
+    } catch (error) {
+      // Check if error is unauthorized
+      if (error.message.toLowerCase() === "unauthorized") {
+        // Dispatch setUnauthorized action
+        dispatch(setUnauthorized());
+        // Redirect to login page
+        navigate("/login");
+      }
+    }
   };
-
   const categoryNames = [
     "Any category",
     "New Groups",

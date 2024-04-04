@@ -1,13 +1,14 @@
-import express from 'express';
-import session from 'express-session';
-import { v4 } from 'uuid';
-import swaggerJsdoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
-import RedisStore from 'connect-redis';
-import { createClient } from 'redis';
-import cors from 'cors';
-import dbInstance from './utils/db';
-import routes from './routes/index';
+import express from "express";
+import session from "express-session";
+import { v4 } from "uuid";
+import swaggerJsdoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
+import RedisStore from "connect-redis";
+import { createClient } from "redis";
+import cors from "cors";
+import dbInstance from "./utils/db";
+import routes from "./routes/index";
+import path from "path";
 /* module to start the server */
 
 let store;
@@ -17,8 +18,10 @@ const client = createClient({
   port: 6379,
 });
 
-client.on('connect', () => {
-  console.log('connected to redis');
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+client.on("connect", () => {
+  console.log("connected to redis");
   store = new RedisStore({ client });
 });
 const printMethod = (req, res, next) => {
