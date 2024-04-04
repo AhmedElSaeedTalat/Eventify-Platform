@@ -46,7 +46,6 @@ class EventControllers {
       category,
       price,
     } = req.body;
-    const image = req.file.filename;
     const createrId = req.session.userId;
     // check if date of event is valid
     const dateObj = new Date(date);
@@ -73,6 +72,7 @@ class EventControllers {
     } else {
       return res.status(500).json({ error: "could't insert price" });
     }
+    const image = req.file.filename;
     // send data to db
     const data = {
       name,
@@ -95,6 +95,15 @@ class EventControllers {
     return res
       .status(201)
       .json({ message: "successfully added event", eventID: eventId });
+  }
+
+  /*
+   *
+   *
+   *
+   */
+  static Async deleteUploadedFile() {
+
   }
 
   /*

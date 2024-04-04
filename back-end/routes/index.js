@@ -133,6 +133,7 @@ const routes = (app) => {
    *               $ref: '#/components/schemas/resError'
    *
    */
+
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
       cb(null, './uploads');
@@ -431,5 +432,6 @@ const routes = (app) => {
    *
    */
   app.post('/insert-category', CategoryControllers.insertCategory);
+  app.delete('/delete-event/:id', EventsControllers.deleteEvent);
 };
 module.exports = routes;
