@@ -19,10 +19,13 @@ const authSlice = createSlice({
       state.isLoading = true;
     },
     loginSuccess(state, action) {
-      state.user = action.payload;
+      state.user = action.payload.user; // Update to include user data
       state.isLoggedIn = true;
       state.isLoading = false;
-      console.log("User logged in:", state.user);
+      state.sessionId = action.payload.sessionId; // Set sessionId from payload
+      state.userId = action.payload.userId; // Set userId from payload
+      console.log("User logged in:", state);
+      console.log("User data:", action.payload);
     },
     loginFailure(state) {
       state.isLoading = false;

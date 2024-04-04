@@ -26,7 +26,15 @@ function Login() {
         password,
       });
 
+      if (!response || !response.data) {
+        throw new Error("No response data received");
+      }
+
       const { message, sessionId } = response.data;
+
+      if (!message || !sessionId) {
+        throw new Error("Incomplete response data received");
+      }
 
       // Dispatch login action with user data
       dispatch(loginSuccess({ message, sessionId }));
@@ -44,9 +52,7 @@ function Login() {
       dispatch(loginFailure());
 
       // Show error toast notification with error message
-      toast.error(error.response.data.error);
-
-      console.log("Error response data:", error.response.data);
+      toast.error(error.message);
     }
   };
 

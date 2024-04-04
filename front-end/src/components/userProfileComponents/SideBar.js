@@ -41,12 +41,6 @@ function SideBar() {
           Create Event
         </Link>
         <Link
-          to="update-event"
-          className="d-block p-3 mb-2 bg-light text-dark text-decoration-none"
-        >
-          Update Event
-        </Link>
-        <Link
           to="settings"
           className="d-block p-3 mb-2 bg-light text-dark text-decoration-none"
         >
