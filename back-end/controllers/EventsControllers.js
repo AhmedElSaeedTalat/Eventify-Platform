@@ -199,12 +199,10 @@ class EventControllers {
    *
    */
   static async displayEvents(req, res) {
-    const pageSize = 3;
     const { category, sortField } = req.query;
-    let { page } = req.query;
-    if (!page) page = 1;
-    // query in case displaying all events
-    const pipeStandard = [
+
+    // Pipeline to lookup categories and filter events
+    const pipeline = [
       {
         $lookup: {
           from: "category",
@@ -214,142 +212,26 @@ class EventControllers {
         },
       },
       { $match: { date: { $gte: new Date() } } },
-      { $skip: (page - 1) * pageSize },
-      { $limit: pageSize },
     ];
 
-    // query in case displaying events based on category
-    const pipeCategory = [
-      {
-        $lookup: {
-          from: "category",
-          localField: "category",
-          foreignField: "_id",
-          as: "category",
-        },
-      },
-      { $match: { date: { $gte: new Date() }, "category.name": category } },
-      { $skip: (page - 1) * pageSize },
-      { $limit: pageSize },
-    ];
-
-    // query in case displaying all events sorted by date
-    const pipeStandardDate = [
-      {
-        $lookup: {
-          from: "category",
-          localField: "category",
-          foreignField: "_id",
-          as: "category",
-        },
-      },
-      { $match: { date: { $gte: new Date() } } },
-      { $sort: { date: 1 } },
-      { $skip: (page - 1) * pageSize },
-      { $limit: pageSize },
-    ];
-
-    // query in case displaying all events sorted by price
-    const pipeStandardPrice = [
-      {
-        $lookup: {
-          from: "category",
-          localField: "category",
-          foreignField: "_id",
-          as: "category",
-        },
-      },
-      { $match: { date: { $gte: new Date() } } },
-      { $sort: { price: 1 } },
-      { $skip: (page - 1) * pageSize },
-      { $limit: pageSize },
-    ];
-
-    // query in case displaying events based on category and sorted by date
-    const pipeCategoryDate = [
-      {
-        $lookup: {
-          from: "category",
-          localField: "category",
-          foreignField: "_id",
-          as: "category",
-        },
-      },
-      { $match: { date: { $gte: new Date() }, "category.name": category } },
-      { $sort: { date: 1 } },
-      { $skip: (page - 1) * pageSize },
-      { $limit: pageSize },
-    ];
-
-    // query in case displaying events based on category and sorted by price
-    const pipeCategoryPrice = [
-      {
-        $lookup: {
-          from: "category",
-          localField: "category",
-          foreignField: "_id",
-          as: "category",
-        },
-      },
-      { $match: { date: { $gte: new Date() }, "category.name": category } },
-      { $sort: { price: 1 } },
-      { $skip: (page - 1) * pageSize },
-      { $limit: pageSize },
-    ];
-
-    if (category) {
-      if (sortField === "date") {
-        dbInstance.db
-          .collection("events")
-          .aggregate(pipeCategoryDate)
-          .toArray()
-          .then((result) => {
-            res.status(200).json({ result });
-          });
-      } else if (sortField === "price") {
-        dbInstance.db
-          .collection("events")
-          .aggregate(pipeCategoryPrice)
-          .toArray()
-          .then((result) => {
-            res.status(200).json({ result });
-          });
-      } else {
-        dbInstance.db
-          .collection("events")
-          .aggregate(pipeCategory)
-          .toArray()
-          .then((result) => {
-            res.status(200).json({ result });
-          });
-      }
-    } else {
-      if (sortField === "date") {
-        dbInstance.db
-          .collection("events")
-          .aggregate(pipeStandardDate)
-          .toArray()
-          .then((result) => {
-            res.status(200).json({ result });
-          });
-      } else if (sortField === "price") {
-        dbInstance.db
-          .collection("events")
-          .aggregate(pipeStandardPrice)
-          .toArray()
-          .then((result) => {
-            res.status(200).json({ result });
-          });
-      } else {
-        dbInstance.db
-          .collection("events")
-          .aggregate(pipeStandard)
-          .toArray()
-          .then((result) => {
-            res.status(200).json({ result });
-          });
-      }
+    // If sorting is requested, add $sort stage to the pipeline
+    if (sortField) {
+      const sortStage = {};
+      sortStage[sortField] = 1; // Sort in ascending order based on the provided field
+      pipeline.push({ $sort: sortStage });
     }
+
+    // Execute the aggregation pipeline
+    dbInstance.db
+      .collection("events")
+      .aggregate(pipeline)
+      .toArray()
+      .then((result) => {
+        res.status(200).json({ result });
+      })
+      .catch((error) => {
+        res.status(500).json({ error: error.message });
+      });
   }
 
   /*
