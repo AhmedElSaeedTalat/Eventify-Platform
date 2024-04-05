@@ -434,7 +434,7 @@ const routes = (app) => {
   app.post('/insert-category', CategoryControllers.insertCategory);
   /**
    * @swagger
-   * event-description/{id}:
+   * event-delete/{id}:
    *   delete:
    *     summary: delete event
    *     description: delete event
