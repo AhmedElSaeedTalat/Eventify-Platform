@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const UpdateEvent = () => {
   const { eventId } = useParams(); // Get eventId from URL params
-  const [updatedEventData, setUpdatedEventData] = useState({}); // Initialize with an empty object
-  const [imageFile, setImageFile] = useState(null);
+  const [updatedEventData, setUpdatedEventData] = useState({
+    name: "",
+    description: "",
+    date: "",
+    state: "",
+    location: "",
+    organizer: "",
+    price: "",
+  });
 
-  // Update state with eventData when it changes
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -32,44 +41,35 @@ const UpdateEvent = () => {
     }));
   };
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    setImageFile(file);
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Updated event data submitted:", updatedEventData);
+    try {
+      // Remove _id field from updatedEventData
+      const {
+        _id,
+        createrId,
+        category,
+        image,
+        imagePath,
+        attendees,
+        ...dataWithoutId
+      } = updatedEventData;
+
+      await axios.put(
+        `http://localhost:5001/event-update/${eventId}`,
+        dataWithoutId
+      );
+      console.log("Updated event data submitted:", dataWithoutId);
+      toast.success("Event updated successfully");
+
+      navigate("/user-profile/my-events");
+    } catch (error) {
+      console.error("Error updating event:", error);
+    }
   };
 
   const minDate = new Date();
   minDate.setDate(minDate.getDate() + 1);
-
-  const categoryNames = [
-    "Any category",
-    "New Groups",
-    "Art & Culture",
-    "Career & Business",
-    "Community & Environment",
-    "Dancing",
-    "Games",
-    "Health & Wellbeing",
-    "Hobbies & Passions",
-    "Identity & Language",
-    "Movements & Politics",
-    "Music",
-    "Parents & Family",
-    "Pets & Animals",
-    "Religion & Spirituality",
-    "Science & Education",
-    "Social Activities",
-    "Sports & Fitness",
-    "Support & Coaching",
-    "Technology",
-    "Travel & Outdoor",
-    "Writing",
-    "Weddings",
-  ];
 
   return (
     <div className="container update-event">
@@ -159,39 +159,6 @@ const UpdateEvent = () => {
             value={updatedEventData.organizer}
             onChange={handleChange}
             required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="category" className="form-label">
-            Category:
-          </label>
-          <select
-            className="form-select"
-            id="category"
-            name="category"
-            value={updatedEventData.category}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select category...</option>
-            {categoryNames.map((category, index) => (
-              <option key={index} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="image" className="form-label">
-            Image:
-          </label>
-          <input
-            type="file"
-            className="form-control"
-            id="image"
-            name="image"
-            accept="image/*"
-            onChange={handleImageUpload}
           />
         </div>
         <div className="mb-3">

@@ -4,7 +4,8 @@ const initialState = {
   user: null,
   isLoggedIn: false,
   isLoading: false,
-  sessionId: null,
+  sessionId: sessionStorage.getItem("sessionId"),
+  userId: sessionStorage.getItem("userId"),
 };
 
 const authSlice = createSlice({
@@ -19,13 +20,17 @@ const authSlice = createSlice({
       state.isLoading = true;
     },
     loginSuccess(state, action) {
-      state.user = action.payload.user; // Update to include user data
+      state.user = action.payload.user;
       state.isLoggedIn = true;
       state.isLoading = false;
-      state.sessionId = action.payload.sessionId; // Set sessionId from payload
-      state.userId = action.payload.userId; // Set userId from payload
+      state.userId = action.payload.userId;
+      state.sessionId = action.payload.sessionId;
       console.log("User logged in:", state);
       console.log("User data:", action.payload);
+
+      // Store session ID and user ID in sessionStorage
+      sessionStorage.setItem("sessionId", action.payload.sessionId);
+      sessionStorage.setItem("userId", action.payload.userId);
     },
     loginFailure(state) {
       state.isLoading = false;
@@ -33,7 +38,12 @@ const authSlice = createSlice({
     logout(state) {
       state.isLoggedIn = false;
       state.sessionId = null;
+      state.userId = null;
       state.user = null;
+
+      // Clear sessionStorage
+      sessionStorage.removeItem("sessionId");
+      sessionStorage.removeItem("userId");
     },
     setSessionId(state, action) {
       state.sessionId = action.payload;
