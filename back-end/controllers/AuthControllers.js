@@ -29,7 +29,7 @@ class AuthController {
     const userId = await UserControllers.insertUser(email, hashedPassword);
     req.session.authenticated = true;
     req.session.userId = userId;
-    return res.status(201).json({ message: 'user got registered' });
+    return res.status(201).json({ message: 'user got registered', sessionId: req.sessionID, userId });
   }
 
   /*
