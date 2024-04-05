@@ -14,7 +14,7 @@ import path from "path";
 let store;
 const app = express();
 const client = createClient({
-  host: 'localhost',
+  host: "localhost",
   port: 6379,
 });
 
@@ -35,12 +35,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: 'http://localhost:3001',
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    origin: ["http://localhost:3000", "http://localhost:3001"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
-  }),
+  })
 );
-app.options('*', cors());
+app.options("*", cors());
 app.use(
   session({
     store,
@@ -52,7 +52,7 @@ app.use(
       secure: false,
       httpOnly: true,
     },
-  }),
+  })
 );
 app.use(
   session({
@@ -65,28 +65,28 @@ app.use(
       secure: false,
       httpOnly: true,
     },
-  }),
+  })
 );
 
 /* swagger setup */
 const options = {
   definition: {
-    openapi: '3.0.0',
+    openapi: "3.0.0",
     info: {
-      title: 'Eventify Api',
-      version: '1.0.0',
-      description: 'Eventify platform api',
+      title: "Eventify Api",
+      version: "1.0.0",
+      description: "Eventify platform api",
     },
     servers: [
       {
-        url: 'http://localhost:5001',
+        url: "http://localhost:5001",
       },
     ],
   },
-  apis: ['./routes/*.js', './routes/*.yml'],
+  apis: ["./routes/*.js", "./routes/*.yml"],
 };
 const specs = swaggerJsdoc(options);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 /* routes */
 routes(app);
@@ -94,7 +94,7 @@ routes(app);
 /* listen to server */
 app.listen(5001, (err) => {
   if (!err) {
-    console.log('started server at port 5001');
+    console.log("started server at port 5001");
   }
 });
 module.exports = app;
