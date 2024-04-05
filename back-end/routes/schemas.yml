@@ -175,7 +175,6 @@ components:
             type: string
           price:
             type: string
-          type: string
 
     # insert category request
     insertCategoryReq:
@@ -191,4 +190,11 @@ components:
       type: object
       properties:
         id:
+          type: string
+
+    # session state response
+    sessionStateResponse:
+      type: object
+      properties:
+        status:
           type: string

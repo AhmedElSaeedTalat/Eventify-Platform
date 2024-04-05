@@ -133,6 +133,7 @@ const routes = (app) => {
    *               $ref: '#/components/schemas/resError'
    *
    */
+
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
       cb(null, './uploads');
@@ -431,5 +432,79 @@ const routes = (app) => {
    *
    */
   app.post('/insert-category', CategoryControllers.insertCategory);
+  /**
+   * @swagger
+   * event-delete/{id}:
+   *   delete:
+   *     summary: delete event
+   *     description: delete event
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         description: event id
+   *         schema:
+   *           type: integer
+   *     responses:
+   *       204:
+   *         description: successful deletion
+   *       404:
+   *         description: error cant find event
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/resError'
+   *       401:
+   *         description: error you must be authenticated and the creater of the event to delete
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/resError'
+   *
+   */
+  app.delete('/event-delete/:id', EventsControllers.deleteEvent);
+  /**
+   * @swagger
+   * /my-events:
+   *   get:
+   *     summary: show events that user has created
+   *     description: show events user has  created
+   *     responses:
+   *       200:
+   *         description: successful retrieval
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/findEventByDateResponse'
+   *       401:
+   *         description: error must be authenticated to check events
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/resError'
+   *       404:
+   *         description: no events found
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/resError'
+   *
+   */
+  app.get('/my-events', UserControllers.showEventsByCreation);
+  /**
+   * @swagger
+   * /my-session:
+   *   get:
+   *     summary: check if session is active or not
+   *     description: check if session is active or not
+   *     responses:
+   *       200:
+   *         description: return session state true or false
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/sessionStateResponse'
+   *
+   */
+  app.get('/my-session', AuthControllers.checkSession);
 };
 module.exports = routes;

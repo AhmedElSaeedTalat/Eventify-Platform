@@ -21,10 +21,13 @@ const authSlice = createSlice({
     loginSuccess(state, action) {
       state.isLoggedIn = true;
       state.isLoading = false;
-      state.sessionId = action.payload.sessionId;
       state.userId = action.payload.userId;
+      state.sessionId = action.payload.sessionId;
       console.log("User logged in:", state);
       console.log("User data:", action.payload);
+
+      // Store session ID and user ID in sessionStorage
+      sessionStorage.setItem("userId", action.payload.userId);
     },
     loginFailure(state) {
       state.isLoading = false;
@@ -32,7 +35,11 @@ const authSlice = createSlice({
     logout(state) {
       state.isLoggedIn = false;
       state.sessionId = null;
-      state.user = null;
+      state.userId = null;
+
+      // Clear sessionStorage
+      sessionStorage.removeItem("sessionId");
+      sessionStorage.removeItem("userId");
     },
     setSessionId(state, action) {
       state.sessionId = action.payload;

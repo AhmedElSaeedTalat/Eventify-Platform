@@ -12,7 +12,8 @@ import UserProfilePage from "./components/userProfileComponents/UserProfilePage"
 import NotFoundPage from "./components/NotFoundPage/NotFoundPage";
 import CreateEvent from "./components/userProfileComponents/CreateEvent";
 import UpdateEvent from "./components/userProfileComponents/UpdateEvent";
-import MyEvents from "./components/userProfileComponents/MyEventsPage";
+import MyEvents from "./components/userProfileComponents/MyEvents.js";
+import MyAttendingEvents from "./components/userProfileComponents/MyAttendingEvents.js";
 
 function App() {
   const userAuth = useSelector((state) => state.auth.isLoggedIn);
@@ -31,6 +32,7 @@ function App() {
         <Route path="register" element={<Signup />} />
         <Route path="user-profile" element={<UserProfilePage />}>
           <Route path="my-events" element={<MyEvents />} />
+          <Route path="my-attending-events" element={<MyAttendingEvents />} />
           <Route path="create-event" element={<CreateEvent />} />
           <Route path="update-event/:eventId" element={<UpdateEvent />} />
         </Route>

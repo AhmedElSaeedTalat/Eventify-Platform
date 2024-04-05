@@ -1,3 +1,4 @@
+import fs from 'fs';
 import { ObjectId } from "mongodb";
 import CategoryControllers from "./CategoryControllers";
 import UserControllers from "./UserControllers";
@@ -14,7 +15,10 @@ class EventControllers {
    *
    */
   static async createEvent(req, res) {
+    const image = req.file.filename;
+    const filePath = req.file.path;
     if (!req.session.authenticated) {
+      await EventControllers.deleteUploadedFile(filePath);
       return res
         .status(401)
         .json({ error: "you must be authenticated to create event" });
@@ -31,6 +35,7 @@ class EventControllers {
     const keys = Object.keys(req.body);
     for (const field of acceptedFields) {
       if (!keys.includes(field)) {
+        await EventControllers.deleteUploadedFile(filePath);
         return res
           .status(404)
           .json({ error: `couldnt insert event check missing field ${field}` });
@@ -46,12 +51,12 @@ class EventControllers {
       category,
       price,
     } = req.body;
-    const image = req.file.filename;
     const createrId = req.session.userId;
     // check if date of event is valid
     const dateObj = new Date(date);
     const currentDate = new Date();
     if (currentDate > dateObj) {
+      await EventControllers.deleteUploadedFile(filePath);
       return res.status(500).json({ error: "please provide a valid date" });
     }
     let categoryId;
@@ -63,6 +68,7 @@ class EventControllers {
     if (categoryDocument) {
       categoryId = categoryDocument._id;
     } else {
+      await EventControllers.deleteUploadedFile(filePath);
       return res
         .status(404)
         .json({ error: "please send a valid category name" });
@@ -71,6 +77,7 @@ class EventControllers {
     if (!Number.isNaN(price) && Number.isInteger(Number(price))) {
       convertPrice = Number(price);
     } else {
+      await EventControllers.deleteUploadedFile(filePath);
       return res.status(500).json({ error: "could't insert price" });
     }
     // send data to db
@@ -85,9 +92,11 @@ class EventControllers {
       price: convertPrice,
       category: categoryId,
       image,
+      imagePath: filePath,
     };
     const eventId = await EventControllers.insertEvent(data);
     if (eventId === -1) {
+      await EventControllers.deleteUploadedFile(filePath);
       return res
         .status(500)
         .json({ error: "couldn't insert event check missing fields" });
@@ -95,6 +104,25 @@ class EventControllers {
     return res
       .status(201)
       .json({ message: "successfully added event", eventID: eventId });
+  }
+
+  /*
+   * @deleteUploadedFile: delete uploaded file in case of error
+   *
+   * @file: file path
+   *
+   */
+  static async deleteUploadedFile(file) {
+    try {
+      await fs.promises.access(file, fs.constants.F_OK);
+      await fs.unlink(file, (err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   /*
@@ -335,6 +363,40 @@ class EventControllers {
       return res.status(200).json(foundEvents);
     }
     return res.status(404).json({ error: "no results were found" });
+  }
+
+  /*
+   * @deleteEvent: delete events based on
+   * id passed as param
+   *
+   * @req: request object
+   * @res: response object
+   */
+  static async deleteEvent(req, res) {
+    if (!req.session.authenticated) {
+      return res
+        .status(401)
+        .json({ error: 'you must be authenticated to delete the event' });
+    }
+    const { id } = req.params;
+    /* check if event exists */
+    const evnt = await EventControllers.findEvent({ _id: ObjectId(id) });
+    if (!evnt) {
+      return res.status(404).json({ error: "can't find event" });
+    }
+
+    /* check if the user attempting to delete the
+     * event is the one who created it
+     */
+    if (evnt.createrId !== req.session.userId) {
+      return res
+        .status(401)
+        .json({ error: 'you must be the event creater to delete the event' });
+    }
+    await EventControllers.deleteUploadedFile(evnt.imagePath);
+    const response = await dbInstance.db.collection('events').deleteOne({ _id: ObjectId(id) });
+    console.log(response);
+    return res.status(204).send();
   }
 
   /*

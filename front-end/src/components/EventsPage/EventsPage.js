@@ -47,12 +47,14 @@ const EventsPage = () => {
           <input type="text" className="form-control" placeholder="Category" />
         </div>
       </div>
-      {/* Render event cards */}
+      {/* Render event cards or show message if no events */}
       <div className="row">
         {status === "loading" ? (
           <p>Loading...</p>
         ) : status === "failed" ? (
           <p>Error: {error}</p>
+        ) : currentEvents.length === 0 ? (
+          <p className="text-center">No events</p>
         ) : (
           currentEvents.map((event) => (
             <div key={event.id} className="col-lg-4 col-md-6 mb-4">

@@ -29,6 +29,12 @@ function SideBar() {
     <aside className="col-md-3 bg-light" style={{ overflowY: "auto" }}>
       <div className="links-container" style={{ paddingTop: "20px" }}>
         <Link
+          to="my-attending-events"
+          className="d-block p-3 mb-2 bg-light text-dark text-decoration-none"
+        >
+          My Upcoming Events
+        </Link>
+        <Link
           to="my-events"
           className="d-block p-3 mb-2 bg-light text-dark text-decoration-none"
         >
