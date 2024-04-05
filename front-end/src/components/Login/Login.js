@@ -26,16 +26,7 @@ function Login() {
         email,
         password,
       });
-
-      if (!response || !response.data) {
-        throw new Error("No response data received");
-      }
-
       const { message, sessionId, userId } = response.data;
-
-      if (!message || !sessionId || !userId) {
-        throw new Error("Incomplete response data received");
-      }
 
       console.log("Login response data:", response.data);
 

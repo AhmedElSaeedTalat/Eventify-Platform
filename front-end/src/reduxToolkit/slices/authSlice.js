@@ -4,7 +4,6 @@ const initialState = {
   user: null,
   isLoggedIn: false,
   isLoading: false,
-  sessionId: sessionStorage.getItem("sessionId"),
   userId: sessionStorage.getItem("userId"),
 };
 
@@ -29,7 +28,6 @@ const authSlice = createSlice({
       console.log("User data:", action.payload);
 
       // Store session ID and user ID in sessionStorage
-      sessionStorage.setItem("sessionId", action.payload.sessionId);
       sessionStorage.setItem("userId", action.payload.userId);
     },
     loginFailure(state) {
