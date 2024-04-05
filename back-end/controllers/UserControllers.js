@@ -22,9 +22,9 @@ class UserControllers {
    *
    * @return - id for the inserted user
    */
-  static async insertUser(email, password) {
+  static async insertUser(username, email, password) {
     const collection = await dbInstance.db.collection('users');
-    const user = await collection.insertOne({ email, password });
+    const user = await collection.insertOne({ username, email, password });
     return user.insertedId;
   }
 

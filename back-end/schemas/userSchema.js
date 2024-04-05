@@ -39,8 +39,12 @@ const createUsersCollection = async (db) => {
     validator: {
       $jsonSchema: {
         bsonType: 'object',
-        required: ['email', 'password'],
+        required: ['username', 'email', 'password'],
         properties: {
+          username: {
+            bsonType: 'string',
+            description: 'Email is a required field',
+          },
           email: {
             bsonType: 'string',
             description: 'Email is a required field',

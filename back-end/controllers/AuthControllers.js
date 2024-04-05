@@ -11,7 +11,10 @@ class AuthController {
    *
    */
   static async postUser(req, res) {
-    const { email, password } = req.body;
+    const { username, email, password } = req.body;
+    if (!username) {
+      return res.status(400).json({ error: 'Missing username' });
+    }
     if (!email) {
       return res.status(400).json({ error: 'Missing email' });
     }
@@ -26,10 +29,15 @@ class AuthController {
     }
     // inserting new user and returning token
     const hashedPassword = sha1(password);
-    const userId = await UserControllers.insertUser(email, hashedPassword);
+    const userId = await UserControllers.insertUser(username, email, hashedPassword);
     req.session.authenticated = true;
     req.session.userId = userId;
-    return res.status(201).json({ message: 'user got registered', sessionId: req.sessionID, userId });
+    return res.status(201).json({
+      message: 'user got registered',
+      sessionId: req.sessionID,
+      userId,
+      username,
+    });
   }
 
   /*
@@ -55,7 +63,12 @@ class AuthController {
     }
     req.session.authenticated = true;
     req.session.userId = user._id.toString();
-    return res.status(200).json({ message: 'user got logged in', sessionId: req.sessionID, userId: user._id.toString() });
+    return res.status(200).json({
+      message: 'user got logged in',
+      sessionId: req.sessionID,
+      userId: user._id.toString(),
+      username: user.username,
+    });
   }
 
   /*
