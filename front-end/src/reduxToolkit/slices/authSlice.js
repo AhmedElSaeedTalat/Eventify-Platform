@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  user: null,
+  userId: null,
   isLoggedIn: false,
   isLoading: false,
-  userId: sessionStorage.getItem("userId"),
+  sessionId: null,
 };
 
 const authSlice = createSlice({
@@ -19,7 +19,6 @@ const authSlice = createSlice({
       state.isLoading = true;
     },
     loginSuccess(state, action) {
-      state.user = action.payload.user;
       state.isLoggedIn = true;
       state.isLoading = false;
       state.userId = action.payload.userId;
@@ -37,7 +36,6 @@ const authSlice = createSlice({
       state.isLoggedIn = false;
       state.sessionId = null;
       state.userId = null;
-      state.user = null;
 
       // Clear sessionStorage
       sessionStorage.removeItem("sessionId");
