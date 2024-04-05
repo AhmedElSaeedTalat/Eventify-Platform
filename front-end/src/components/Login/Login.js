@@ -1,7 +1,8 @@
-import { useState } from "react";
+// Login.js
+
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import {
-  login,
   loginFailure,
   loginSuccess,
 } from "../../reduxToolkit/slices/authSlice";
@@ -30,17 +31,20 @@ function Login() {
         throw new Error("No response data received");
       }
 
-      const { message, sessionId } = response.data;
+      const { message, sessionId, userId } = response.data;
 
-      if (!message || !sessionId) {
+      if (!message || !sessionId || !userId) {
         throw new Error("Incomplete response data received");
       }
 
-      // Dispatch login action with user data
-      dispatch(loginSuccess({ message, sessionId }));
+      console.log("Login response data:", response.data);
 
-      // Save session ID in session storage
+      // Dispatch login action with user data
+      dispatch(loginSuccess({ message, sessionId, userId }));
+
+      // Save session ID and user ID in session storage
       sessionStorage.setItem("sessionId", sessionId);
+      sessionStorage.setItem("userId", userId);
 
       // Show success toast notification
       toast.success(message);
