@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  user: null,
+  userId: null,
   isLoggedIn: false,
   isLoading: false,
   sessionId: null,
@@ -19,11 +19,10 @@ const authSlice = createSlice({
       state.isLoading = true;
     },
     loginSuccess(state, action) {
-      state.user = action.payload.user; // Update to include user data
       state.isLoggedIn = true;
       state.isLoading = false;
-      state.sessionId = action.payload.sessionId; // Set sessionId from payload
-      state.userId = action.payload.userId; // Set userId from payload
+      state.sessionId = action.payload.sessionId;
+      state.userId = action.payload.userId;
       console.log("User logged in:", state);
       console.log("User data:", action.payload);
     },

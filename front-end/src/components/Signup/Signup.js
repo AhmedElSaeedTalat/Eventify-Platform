@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loginFailure } from "../../reduxToolkit/slices/authSlice";
+import {
+  loginFailure,
+  loginSuccess,
+} from "../../reduxToolkit/slices/authSlice";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./Signup.css";
 
@@ -26,25 +29,33 @@ const SignupForm = () => {
         password,
       });
 
-      toast.success(`User registered successfully`);
-      navigate("/signin");
+      if (!response || !response.data) {
+        throw new Error("No response data received");
+      }
+
+      const { message, sessionId } = response.data;
+
+      if (!message || !sessionId) {
+        throw new Error("Incomplete response data received");
+      }
+
+      // Dispatch login success action with user data
+      dispatch(loginSuccess({ message, sessionId }));
+
+      // Save session ID in session storage
+      sessionStorage.setItem("sessionId", sessionId);
+
+      // Show success toast notification
+      toast.success(message);
+
+      // Redirect user to home page upon successful signup
+      navigate("/");
     } catch (error) {
       console.error("Error creating user:", error);
       dispatch(loginFailure());
-      if (error.response && error.response.data) {
-        // If error.response.data exists and it's an object, convert it to a string
-        const errorMessage =
-          typeof error.response.data === "object"
-            ? JSON.stringify(error.response.data)
-            : error.response.data;
-        let errorMsg = JSON.parse(errorMessage);
-        toast.error(`Signup failed. ${errorMsg.error}. Please try again.`);
-      } else {
-        // If error.response.data does not exist or it's not an object, display a generic error message
-        toast.error(
-          "Signup failed. An unexpected error occurred. Please try again."
-        );
-      }
+
+      // Show error toast notification with error message
+      toast.error("Signup failed. Please try again.");
     }
   };
 
