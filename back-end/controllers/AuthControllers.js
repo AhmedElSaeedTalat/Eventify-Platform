@@ -72,5 +72,19 @@ class AuthController {
       return res.status(200).json({ message: 'logged out successfully' });
     });
   }
+
+  /*
+   * @checkSession: check if session is active
+   *
+   * @req: request object
+   * @res: response object
+   *
+   * @return - if session is active
+   */
+  static async checkSession(req, res) {
+    let status = false;
+    if (req.session.authenticated) status = true; else status = false;
+    return res.status(200).json({ status });
+  }
 }
 module.exports = AuthController;

@@ -490,5 +490,21 @@ const routes = (app) => {
    *
    */
   app.get('/my-events', UserControllers.showEventsByCreation);
+  /**
+   * @swagger
+   * /my-session:
+   *   get:
+   *     summary: check if session is active or not
+   *     description: check if session is active or not
+   *     responses:
+   *       200:
+   *         description: return session state true or false
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/sessionStateResponse'
+   *
+   */
+  app.get('/my-session', AuthControllers.checkSession);
 };
 module.exports = routes;
