@@ -10,18 +10,12 @@ const EventDetailsPage = () => {
   const [eventData, setEventData] = useState({});
 
   const { isLoggedIn, userId } = useSelector((state) => state.auth);
-  const { sessionId } = useSelector((state) => state.auth);
-  console.log("sessionId:", sessionId);
-
-  console.log("userId:", userId);
-  console.log("userAuth:", isLoggedIn);
 
   useEffect(() => {
     axios
       .get(`http://localhost:5001/event/${eventId}`)
       .then((response) => {
         setEventData(response.data);
-        console.log("Event data:", response.data);
 
         // Check if the user is attending the event
         if (
@@ -83,11 +77,8 @@ const EventDetailsPage = () => {
                 <h5 className="card-title">Event Details</h5>
                 <p className="card-text">Price: ${eventData.price}</p>
                 <p className="card-text">Category: Any category</p>{" "}
-                {/* Default category */}
                 <p className="card-text">Organizer: {eventData.organizer}</p>
-                {/* Conditionally render the attend button based on user authentication and if the user is not the creator */}
                 {isLoggedIn &&
-                  eventData.creatorId !== userId &&
                   (attending ? (
                     <button
                       className="btn btn-danger"
