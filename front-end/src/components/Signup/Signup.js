@@ -15,6 +15,7 @@ const SignupForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [username, setUsername] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,11 +28,14 @@ const SignupForm = () => {
       const response = await axios.post("http://localhost:5001/register", {
         email,
         password,
+        username,
       });
 
       if (!response || !response.data) {
         throw new Error("No response data received");
       }
+
+      console.log("Signup response data:", response.data);
 
       const { message, sessionId } = response.data;
 
@@ -64,6 +68,19 @@ const SignupForm = () => {
       <div className="signup-form">
         <h2>Signup</h2>
         <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label htmlFor="username" className="form-label">
+              Username
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </div>
           <div className="mb-3">
             <label htmlFor="email" className="form-label">
               Email address
