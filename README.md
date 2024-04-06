@@ -20,6 +20,15 @@ With Eventify, you'll have access to a wide range of tools and resources to brin
 
 ## Routes
 **different main routes include:**  
+* Home page
+* Register page
+* login
+* logout
+* Creat events
+* Events
+* My events
+* Find-by-date
+* Attend events
 
 ## Technologies
 **A list of technologies used within the project:**  
