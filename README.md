@@ -31,17 +31,25 @@ With Eventify, you'll have access to a wide range of tools and resources to brin
 
 ## Installation
 For the application to run both the backend and frontend should be runing at the same time. 
+
 Frontend
 
 $ Clone the repository: `git clone https://github.com/AhmedElSaeedTalat/Eventify-Platform.git`  
+
 $ Move to the project directory: `cd Eventify-Platform` 
+
 $ Move to folder: front-end
+
 $ Run the app: 'npm start'
 
 Backend
+
 $ Clone the repository: `git clone https://github.com/AhmedElSaeedTalat/Eventify-Platform.git`  
+
 $ Move to the project directory: `cd Eventify-Platform`
+
 $ Move to folder: Back-end
+
 $ Run the app: `npm run start-server`
 
 
