@@ -21,7 +21,6 @@ const authSlice = createSlice({
       state.userId = action.payload.userId;
       state.sessionId = action.payload.sessionId;
       state.userName = action.payload.userName;
-      console.log("User logged in:", state);
     },
     loginFailure(state) {
       state.isLoading = false;

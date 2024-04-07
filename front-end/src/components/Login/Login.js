@@ -24,12 +24,12 @@ function Login() {
         email,
         password,
       });
-      const { message, sessionId, userId } = response.data;
+      const { message, sessionId, userId, username: userName } = response.data;
 
       console.log("Login response data:", response.data);
 
       // Dispatch login action with user data
-      dispatch(loginSuccess({ message, sessionId, userId }));
+      dispatch(loginSuccess({ message, sessionId, userId, userName }));
 
       // Save session ID and user ID in session storage
       sessionStorage.setItem("sessionId", sessionId);
