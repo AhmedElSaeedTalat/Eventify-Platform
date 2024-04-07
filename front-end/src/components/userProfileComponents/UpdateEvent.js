@@ -44,7 +44,6 @@ const UpdateEvent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Remove _id field from updatedEventData
       const {
         _id,
         createrId,
@@ -107,7 +106,7 @@ const UpdateEvent = () => {
             Date:
           </label>
           <input
-            type="date"
+            type="datetime-local"
             className="form-control"
             id="date"
             name="date"
