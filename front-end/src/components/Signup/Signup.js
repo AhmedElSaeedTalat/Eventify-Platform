@@ -46,9 +46,6 @@ const SignupForm = () => {
       // Dispatch login success action with user data
       dispatch(loginSuccess({ message, sessionId }));
 
-      // Save session ID in session storage
-      sessionStorage.setItem("sessionId", sessionId);
-
       // Show success toast notification
       toast.success(message);
 
@@ -58,8 +55,11 @@ const SignupForm = () => {
       console.error("Error creating user:", error);
       dispatch(loginFailure());
 
-      // Show error toast notification with error message
-      toast.error("Signup failed. Please try again.");
+      if (error.response && error.response.data && error.response.data.error) {
+        toast.error(error.response.data.error);
+      } else {
+        toast.error("Signup failed. Please try again.");
+      }
     }
   };
 
