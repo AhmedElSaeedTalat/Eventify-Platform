@@ -16,13 +16,6 @@ const UserProfilePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // If user is not logged in, redirect to login page
-    if (!isLoggedIn) {
-      navigate("/signin");
-      toast.error("You need to be logged in first.");
-      return;
-    }
-
     const checkSession = async () => {
       try {
         const response = await axios.get("http://localhost:5001/my-session");
@@ -40,8 +33,13 @@ const UserProfilePage = () => {
       }
     };
 
-    checkSession();
-  }, [dispatch, navigate, isLoggedIn]);
+    if (isLoggedIn) {
+      checkSession();
+    }
+
+    // Cleanup function to cancel pending requests
+    return () => {};
+  }, [dispatch, isLoggedIn, navigate]);
 
   const isUserProfileRoute =
     location.pathname === "/user-profile" ||

@@ -31,10 +31,10 @@ const SignupForm = () => {
         username,
       });
 
-      const { message, sessionId, userId } = response.data;
+      const { message, sessionId, userId, username: userName } = response.data;
 
       // Dispatch login success action with user data
-      dispatch(loginSuccess({ message, sessionId, userId }));
+      dispatch(loginSuccess({ message, sessionId, userId, userName }));
 
       // Show success toast notification
       toast.success(message);

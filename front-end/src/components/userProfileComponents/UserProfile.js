@@ -1,13 +1,14 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 const UserProfile = () => {
   // Mock user data
   const user = {
-    name: "John Doe",
-    email: "john.doe@example.com",
     profilePicture: "https://via.placeholder.com/150", // Example placeholder image
     // Add additional mock user information as needed
   };
+
+  const userName = useSelector((state) => state.auth.userName) || "User";
 
   return (
     <div className="user-profile">
@@ -17,13 +18,12 @@ const UserProfile = () => {
             {/* User picture */}
             <img
               src={user.profilePicture}
-              alt={user.name}
+              alt={userName}
               className="rounded-circle"
               style={{ width: "150px", height: "150px" }}
             />
             {/* User name */}
-            <h2 className="mt-3">{user.name}</h2>
-            <p>{user.email}</p>
+            <h2 className="mt-3">{userName}</h2>
           </div>
         </div>
       </div>
