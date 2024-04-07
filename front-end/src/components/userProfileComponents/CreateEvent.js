@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addEvent } from "../../reduxToolkit/slices/EventSlice";
-import { setUnauthorized } from "../../reduxToolkit/slices/authSlice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const CreateEventPage = () => {
   const [eventData, setEventData] = useState({
@@ -48,10 +48,8 @@ const CreateEventPage = () => {
       await dispatch(addEvent(formData));
       navigate("/events");
     } catch (error) {
-      // Check if error is unauthorized
+      toast.error("Error creating event. Please try again.");
       if (error.message.toLowerCase() === "unauthorized") {
-        // Dispatch setUnauthorized action
-        dispatch(setUnauthorized());
         // Redirect to login page
         navigate("/login");
       }
@@ -123,7 +121,7 @@ const CreateEventPage = () => {
             Date:
           </label>
           <input
-            type="date"
+            type="datetime-local"
             className="form-control"
             id="date"
             name="date"

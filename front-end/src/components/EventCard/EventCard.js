@@ -1,9 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-
-// TODO Check if the user is the eventCreator to remove the attend button
-// TODO Check if the user is already attending the event to show the unattend button
 
 const EventCard = ({
   _id,
@@ -24,9 +20,6 @@ const EventCard = ({
     hour: "numeric",
     minute: "numeric",
   });
-
-  const events = useSelector((state) => state.events.events);
-  console.log("Events:", events);
 
   // Determine price display
   let priceDisplay;
