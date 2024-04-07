@@ -31,20 +31,10 @@ const SignupForm = () => {
         username,
       });
 
-      if (!response || !response.data) {
-        throw new Error("No response data received");
-      }
-
-      console.log("Signup response data:", response.data);
-
-      const { message, sessionId } = response.data;
-
-      if (!message || !sessionId) {
-        throw new Error("Incomplete response data received");
-      }
+      const { message, sessionId, userId } = response.data;
 
       // Dispatch login success action with user data
-      dispatch(loginSuccess({ message, sessionId }));
+      dispatch(loginSuccess({ message, sessionId, userId }));
 
       // Show success toast notification
       toast.success(message);
@@ -55,11 +45,8 @@ const SignupForm = () => {
       console.error("Error creating user:", error);
       dispatch(loginFailure());
 
-      if (error.response && error.response.data && error.response.data.error) {
-        toast.error(error.response.data.error);
-      } else {
-        toast.error("Signup failed. Please try again.");
-      }
+      // Show error toast notification with error message
+      toast.error("Signup failed. Please try again.");
     }
   };
 
