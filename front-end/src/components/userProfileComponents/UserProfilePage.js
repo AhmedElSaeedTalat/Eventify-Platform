@@ -1,14 +1,47 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+import { logout } from "../../reduxToolkit/slices/authSlice";
 import SideBar from "./SideBar";
+import { toast } from "react-toastify";
 import "./UserProfilePage.css";
 import UserProfile from "./UserProfile";
+import { useNavigate } from "react-router-dom";
 
 const UserProfilePage = () => {
-  const isLoggedIn = useSelector((state) => state);
-  console.log(isLoggedIn);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // If user is not logged in, redirect to login page
+    if (!isLoggedIn) {
+      navigate("/signin");
+      toast.error("You need to be logged in first.");
+      return;
+    }
+
+    const checkSession = async () => {
+      try {
+        const response = await axios.get("http://localhost:5001/my-session");
+        if (!response.data.status) {
+          // Session is expired, log out the user
+          dispatch(logout());
+          toast.error("Your session has expired. Please log in again.");
+          navigate("/signin");
+        }
+      } catch (error) {
+        console.error("Error checking session:", error);
+        dispatch(logout());
+        toast.error("Error checking session. Please log in again.");
+        navigate("/signin");
+      }
+    };
+
+    checkSession();
+  }, [dispatch, navigate, isLoggedIn]);
 
   const isUserProfileRoute =
     location.pathname === "/user-profile" ||
