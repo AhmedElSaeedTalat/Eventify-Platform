@@ -57,7 +57,7 @@ const EventsPage = () => {
           <p className="text-center">No events</p>
         ) : (
           currentEvents.map((event) => (
-            <div key={event.id} className="col-lg-4 col-md-6 mb-4">
+            <div key={event._id} className="col-lg-4 col-md-6 mb-4">
               <EventCard {...event} />
             </div>
           ))

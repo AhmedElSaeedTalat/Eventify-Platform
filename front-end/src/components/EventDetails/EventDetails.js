@@ -33,10 +33,10 @@ const EventDetailsPage = () => {
   }, [eventId, userId]);
 
   const handleAttendClick = () => {
-    setAttending(true);
     axios
       .post(`http://localhost:5001/attend-event`, { eventId })
       .then((response) => {
+        setAttending(true);
         console.log("Attend event response:", response.data);
       })
       .catch((error) => {
@@ -45,10 +45,10 @@ const EventDetailsPage = () => {
   };
 
   const handleUnattendClick = () => {
-    setAttending(false);
     axios
       .get(`http://localhost:5001/unattend-event/${eventId}`)
       .then((response) => {
+        setAttending(false);
         console.log("Unattend event response:", response.data);
       })
       .catch((error) => {
@@ -56,13 +56,22 @@ const EventDetailsPage = () => {
       });
   };
 
+  // Format date
+  const formattedDate = new Date(eventData.date).toLocaleString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  });
+
   return (
     <div className="event-details container mt-5">
       {eventData && (
-        <div className="row" style={{ marginTop: "100px", padding: "20px" }}>
+        <div className="row eventParent">
           <div className="col-md-8">
             <h1>{eventData.name}</h1>
-            <p className="text-muted">Date: {eventData.date}</p>
+            <p className="text-muted">Date: {formattedDate}</p>
             <p className="text-muted">Location: {eventData.location}</p>
             <img
               src={`http://localhost:5001/uploads/${eventData.image}`}
