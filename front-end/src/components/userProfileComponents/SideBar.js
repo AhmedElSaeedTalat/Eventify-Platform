@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../reduxToolkit/slices/authSlice";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -8,18 +8,16 @@ import { toast } from "react-toastify";
 function SideBar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const handleLogout = async () => {
     try {
-      await axios.get("http://localhost:5001/logout");
-
-      dispatch(logout());
-
-      toast.success("Logged out successfully");
-
-      sessionStorage.removeItem("sessionId");
-
-      navigate("/");
+      if (isLoggedIn) {
+        await axios.get("http://localhost:5001/logout");
+        dispatch(logout());
+        toast.success("Logged out successfully");
+        navigate("/");
+      }
     } catch (error) {
       console.error("Error logging out:", error);
     }

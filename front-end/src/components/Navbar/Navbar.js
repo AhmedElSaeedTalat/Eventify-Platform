@@ -11,19 +11,17 @@ function Navbar() {
   const location = useLocation();
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const sessionId = useSelector((state) => state.auth.sessionId);
+
   const navigate = useNavigate();
 
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   useEffect(() => {
-    // Check session ID in session storage on component mount
-    const sessionId = sessionStorage.getItem("sessionId");
     if (!sessionId && isLoggedIn) {
-      // Session ID expired, perform logout
       handleLogout();
-      dispatch(logout()); // Update isLoggedIn state to false
+      dispatch(logout());
     } else if (sessionId && !isLoggedIn) {
-      // If there is a sessionId and the user is not logged in, update isLoggedIn to true
       dispatch(loginSuccess({ message: "Logged in", sessionId }));
     }
   }, []);
@@ -33,7 +31,6 @@ function Navbar() {
       await axios.get("http://localhost:5001/logout");
       dispatch(logout());
       toast.success("Logged out successfully");
-      sessionStorage.removeItem("sessionId");
       navigate("/");
     } catch (error) {
       console.error("Error logging out:", error);
